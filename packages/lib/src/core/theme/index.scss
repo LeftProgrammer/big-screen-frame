@@ -1,0 +1,26 @@
+// theme.scss
+$primary-color-light: #3498db;
+$background-color-light: #ffffff;
+$text-color-light: #333333;
+
+$primary-color-dark: #1abc9c;
+$background-color-dark: #2c3e50;
+$text-color-dark: #ecf0f1;
+
+@mixin theme-styles($primary-color, $background-color, $text-color) {
+  background-color: $background-color;
+  color: $text-color;
+  
+  .btn-primary {
+    background-color: $primary-color;
+    color: #fff;
+  }
+}
+
+.light-theme {
+  @include theme-styles($primary-color-light, $background-color-light, $text-color-light);
+}
+
+.dark-theme {
+  @include theme-styles($primary-color-dark, $background-color-dark, $text-color-dark);
+}

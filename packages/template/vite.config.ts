@@ -45,7 +45,7 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
         "@": resolve(__dirname, "./src"),
         "components": resolve(__dirname, "./src/components"),
         "api": resolve(__dirname, "./src/api"),
-        '@jinghe/jinghe-lanhai':
+        '@jinghe/jinghe-lanhai': 
           isProduction
           ? '@jinghe/jinghe-lanhai'               // 使用发布版本
           : '@jinghe/jinghe-lanhai/src/index.ts', // 使用本地源码

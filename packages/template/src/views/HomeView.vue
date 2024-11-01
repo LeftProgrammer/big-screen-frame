@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { RouterView, useRouter } from "vue-router";
-import ScaleScreen from "@/components/scale-screen";
+// import ScaleScreen from "@/components/scale-screen";
+import { ScaleScreen } from "@jinghe/jinghe-lanhai";
 import Headers from "./header.vue";
 import Footer from "./footer.vue";
 import Setting from "./setting.vue";

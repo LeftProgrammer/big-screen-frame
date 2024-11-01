@@ -1,3 +1,3 @@
-import ScaleScreen from './scale-screen.vue'
+// import ScaleScreen from './scale-screen.vue'
 
-export default ScaleScreen
+// export default ScaleScreen

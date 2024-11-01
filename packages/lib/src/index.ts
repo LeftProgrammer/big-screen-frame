@@ -1,4 +1,4 @@
 
-import { default as ScaleScreen } from './base/scale-screen/index.vue';
+import { default as ScaleScreen } from './core/scale-screen/index.vue';
 
 export { ScaleScreen };
