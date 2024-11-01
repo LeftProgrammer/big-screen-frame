@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.app.json",
+  "exclude": [],
+  "compilerOptions": {
+    "composite": true,
+    "lib": ["ESNext", "DOM"],  // 支持最新的 ESNext 特性和 DOM 库
+    "types": ["node", "jsdom"]  // 引入 Node 和 jsdom 的类型
+  }
+}

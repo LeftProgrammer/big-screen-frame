@@ -1,0 +1,16 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": ["src/env.d.ts", "src/**/*", "src/**/*.vue", "index.ts"],
+  "exclude": ["node_modules", "dist", "tests"],
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "declarationDir": "types",
+    "allowJs": false,  // 如果不需要处理 JS 文件，可以禁用
+    "baseUrl": ".",
+    "rootDir": "src",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}

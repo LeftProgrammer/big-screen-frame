@@ -1,0 +1,19 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.config.json"
+    },
+    // core
+    {
+      "path": "./packages/lib/tsconfig.app.json"
+    },
+    {
+      "path": "./packages/lib/tsconfig.vitest.json"
+    },
+    // template
+    {
+      "path": "./packages/template/tsconfig.json"
+    }
+  ]
+}
