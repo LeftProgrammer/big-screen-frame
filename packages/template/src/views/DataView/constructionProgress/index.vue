@@ -11,7 +11,7 @@
         }"
         @click="changeBtn(item.type)"
       >
-        <span>{{ item.name }}</span>
+        <span class="hover:text-blue-500">{{ item.name }}</span>
       </div>
     </div>
     <div class="content">
@@ -20,6 +20,7 @@
         indicator-position="outside"
         :autoplay="false"
         :loop="false"
+        :initial-index="initialIndex"
       >
         <el-carousel-item v-for="(item, index) in dataList" :key="index">
           <div class="custom-carousel h-full w-full">
@@ -43,7 +44,10 @@
                     <div class="progress-item" @click="clickProgress(fan)">
                       <div class="up">
                         <div class="icon"></div>
-                        <div class="title">{{ fan.name }}风机</div>
+                        <div class="title">
+                          {{ fan.name
+                          }}{{ activeBtn == "B06A01A01" ? "风机" : "海缆" }}
+                        </div>
                         <div class="right-icon"></div>
                       </div>
                       <div class="down">
@@ -56,7 +60,10 @@
                   </template>
                   <template #default>
                     <div class="popover-content">
-                      <div class="title">{{ fan.name }}风机</div>
+                      <div class="title">
+                        {{ fan.name
+                        }}{{ activeBtn == "B06A01A01" ? "风机" : "海缆" }}
+                      </div>
                       <div class="progress-info">
                         <div class="info-item">
                           <span class="label">当前进度:</span>
@@ -147,17 +154,29 @@ const customColor = (percentage: number) => {
 
 const carouselRef = ref();
 
+const initialIndex = ref(0);
+
 const TimeChange = (time: number) => {
   if (!time) return "";
-  const day = Math.floor(time / 1440);
-  const hour = Math.floor((time % 1440) / 60);
-  const minute = Math.round(time % 60); //四舍五入
+  // Convert hours to minutes (10.5 hours = 630 minutes)
+  const totalMinutes = time * 60;
+  const day = Math.floor(totalMinutes / 1440);
+  const hour = Math.floor((totalMinutes % 1440) / 60);
+  const minute = Math.round(totalMinutes % 60); // Round to nearest minute
   return `${day}天${hour}小时${minute}分钟`;
 };
+const prev = () => carouselRef.value.prev();
+const next = () => carouselRef.value.next();
+const setActiveItem = (index: number) => {
+  carouselRef.value.setActiveItem(index);
+};
+
 const changeBtn = async (type: string) => {
   activeBtn.value = type;
   await requestData(type);
+  setActiveItem(0);
 };
+
 // 请求数据
 const requestData = async (type: string) => {
   const { code, result } = await constructionList({ type });
@@ -183,9 +202,6 @@ const clickProgress = async (item: any) => {
 onMounted(async () => {
   changeBtn(activeBtn.value);
 });
-
-const prev = () => carouselRef.value.prev();
-const next = () => carouselRef.value.next();
 </script>
 
 <style scoped lang="scss">
@@ -276,6 +292,13 @@ const next = () => carouselRef.value.next();
                 font-size: 20px;
                 margin: 0 8px;
                 letter-spacing: 2px;
+                cursor: pointer;
+                // 鼠标移入动画
+                &:hover {
+                  transform: scale(1.05);
+                  transition: transform 0.1s ease;
+                  color: #0096ff;
+                }
               }
               .right-icon {
                 width: 22px;
@@ -299,13 +322,13 @@ const next = () => carouselRef.value.next();
             width: auto !important;
             padding: 0;
             .popover-content {
-              width: 437px;
-              height: 336px;
+              width: 437px !important;
+              height: 336px !important;
               padding: 5px 20px 0px 20px;
-              background-image: url("@/assets/img/big-data/details-bg.png");
-              background-position: center;
-              background-size: cover;
-              background-repeat: no-repeat;
+              background-image: url("@/assets/img/big-data/details-bg.png") !important;
+              background-position: center !important;
+              background-size: 100% 100% !important;
+              background-repeat: no-repeat !important;
               .title {
                 color: #fff;
                 font-size: 20px;
@@ -354,6 +377,10 @@ const next = () => carouselRef.value.next();
       background-size: 100% 100%;
       background-repeat: no-repeat;
       background-position: center;
+    }
+    > div:hover {
+      transform: scale(1.1);
+      transition: transform 0.1s ease;
     }
     .prev {
       background-image: url("@/assets/img/big-data/prev.png");

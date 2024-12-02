@@ -31,7 +31,7 @@ onMounted(async () => {
         <div class="icon-wrapper icon-capacity"></div>
         <div class="stat-info">
           <div class="stat-label">装机容量</div>
-          <div class="stat-value">399 <span class="unit">WM</span></div>
+          <div class="stat-value">399 <span class="unit">MW</span></div>
         </div>
       </div>
       <div class="stat-item mx-10">
@@ -62,6 +62,7 @@ onMounted(async () => {
   position: absolute;
   bottom: 0;
   left: 0;
+  z-index: 10;
   .content_bottom-content {
     display: flex;
     justify-content: center;

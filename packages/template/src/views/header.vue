@@ -45,21 +45,23 @@ timeFn();
 const back = () => {
   // router.push('/analysis');
   router.go(-1);
-}
+};
 
 let nowPath = ref("/analysis");
 
 // 监听路由变化
-watch(router.currentRoute, (to, from) => {
-  console.log(to, from);
+watch(
+  router.currentRoute,
+  (to, from) => {
+    console.log(to, from);
     nowPath.value = to.path;
   },
-  { immediate: true },
+  { immediate: true }
 );
 </script>
 
 <template>
-  <div class="d-flex jc-center title_wrap">
+  <div class="d-flex jc-center title_wrap animate-enter">
     <div class="timers">
       <span class="font-bold text-xl"> {{ dateData.nowTime }}</span>
       <span class="mx-3 text-gray-400">|</span>
@@ -91,7 +93,7 @@ watch(router.currentRoute, (to, from) => {
 .title_wrap {
   width: 100%;
   height: 118px;
-  background-image: url("public/static/img/index_1.webp");
+  background-image: url("@/assets/img/big-data/index_1.webp");
   background-size: cover;
   background-position: center center;
   position: relative;
@@ -130,6 +132,9 @@ watch(router.currentRoute, (to, from) => {
       background-position: center center;
       cursor: pointer;
       margin-right: 24px;
+      &:hover {
+        transform: scale(1.05);
+      }
     }
     .video {
       width: 88px;
@@ -139,6 +144,9 @@ watch(router.currentRoute, (to, from) => {
       background-position: center center;
       cursor: pointer;
       margin-right: 24px;
+      &:hover {
+        transform: scale(1.05);
+      }
     }
     .back {
       width: 88px;
@@ -147,6 +155,9 @@ watch(router.currentRoute, (to, from) => {
       background-size: cover;
       background-position: center center;
       cursor: pointer;
+      &:hover {
+        transform: scale(1.05);
+      }
     }
     .loginout {
       width: 45px;
@@ -155,9 +166,30 @@ watch(router.currentRoute, (to, from) => {
       background-size: cover;
       background-position: center center;
       cursor: pointer;
+      &:hover {
+        transform: scale(1.05);
+      }
     }
   }
+
+  // 添加动画相关样式
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: fadeInDown 0.8s ease forwards;
 }
+
+// 添加动画关键帧
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .title {
   position: relative;
   // width: 500px;

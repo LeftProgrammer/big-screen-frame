@@ -1,7 +1,8 @@
 import { GET, } from "@/api/api";
 const api = '/api';
 const indexUrl = {
-    'getWeather7days': api + '/dashboard/information/getWeather7days',// pc七天天气
+    // 'getWeather7days': api + '/dashboard/information/getWeather7days',// pc七天天气
+    'getWeather7days': api + '/sea/weatherInfo/get7dayInfo',// pc七天天气
     'processAssess': api + '/sea/weatherInfo/processAssess',// 施工评估与预警
     'sailingAssess': api + '/sea/weatherInfo/sailingAssess', //出航评估与预警
 }

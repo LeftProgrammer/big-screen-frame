@@ -4,7 +4,7 @@
       <div class="relative w-full container">
         <div ref="container" class="w-full h-full absolute pie"></div>
         <div class="absolute top-0 left-0 w-full h-full pie-bg"></div>
-        <div class="total-value text-sm text-white">总次数</div>
+        <div class="total-value text-sm text-white">出现总次数</div>
       </div>
       <div class="legend">
         <div class="flex justify-around items-center">

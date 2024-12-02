@@ -1,10 +1,22 @@
 <template>
   <div class="page-dataView">
-    <div class="title">数据看板</div>
-    <div class="constructionProgress" @click="goTo('/constructionProgress')"></div>
-    <div class="videoSurveillance" @click="goTo('/videoSurveillance')"></div>
-    <div class="shipPosition" @click="goTo('/shipPosition')"></div>
-    <div class="meteorologicalData" @click="goTo('/meteorologicalData')"></div>
+    <!-- <div class="title animate-title">数据看板</div> -->
+    <div
+      class="data-item constructionProgress animate-item"
+      @click="goTo('/constructionProgress')"
+    ></div>
+    <div
+      class="data-item videoSurveillance animate-item"
+      @click="goTo('/videoSurveillance')"
+    ></div>
+    <div
+      class="data-item shipPosition animate-item"
+      @click="goTo('/shipPosition')"
+    ></div>
+    <div
+      class="data-item meteorologicalData animate-item"
+      @click="goTo('/meteorologicalData')"
+    ></div>
   </div>
 </template>
 <script setup lang="ts">
@@ -38,8 +50,35 @@ const goTo = (path: string) => {
     font-family: "ZiTiQuanXinYiGuanHeiTi4";
     letter-spacing: 5px;
     font-weight: 600;
+    opacity: 0;
+    &.animate-title {
+      animation: slideDown 0.8s ease forwards;
+    }
   }
-
+  .data-item {
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(100px);
+    &.animate-item {
+      animation: slideUp 0.8s ease forwards;
+    }
+    &.constructionProgress {
+      animation-delay: 0.2s;
+    }
+    &.videoSurveillance {
+      animation-delay: 0.4s;
+    }
+    &.shipPosition {
+      animation-delay: 0.6s;
+    }
+    &.meteorologicalData {
+      animation-delay: 0.8s;
+    }
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.05) translateY(-10px) !important;
+    }
+  }
   div {
     width: 260px;
     height: 362px;
@@ -58,6 +97,28 @@ const goTo = (path: string) => {
   }
   .meteorologicalData {
     background-image: url("@/assets/img/big-data/meteorologicalData.png");
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -150%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>

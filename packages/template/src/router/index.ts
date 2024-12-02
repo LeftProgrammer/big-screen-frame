@@ -9,7 +9,7 @@ const whiteList = ['/login', '/user/register', '/user/register-result', '/user/a
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/shipPosition',
+    redirect: '/analysis',
   },
   {
     path: '/HomeView',

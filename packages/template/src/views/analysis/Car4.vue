@@ -3,15 +3,26 @@
     <template #content>
       <div class="weather-card">
         <div class="weather-header">
-          <div class="weather-icon"></div>
+          <div
+            class="weather-icon"
+            :style="{
+              backgroundImage: `url(${getImageUrl(
+                `img/icon/${weatherInfoData.weatherCode}.png`
+              )})`,
+            }"
+          ></div>
           <div class="temp-info">
-            <h1 class="text-white">27.5°</h1>
+            <h1 class="text-white">{{ weatherInfoData.temperature }}°</h1>
             <div class="weather-condition">
               <span>{{ weatherInfoData.weatherDescription }}</span>
               <span>|</span>
               <span>{{ weatherInfoData.windMark }}风</span>
               <span>|</span>
-              <span>3级**</span>
+              <span
+                >{{
+                  getJsonLevel(weatherInfoData.windSpeed, "wind_levels").level
+                }}级</span
+              >
             </div>
           </div>
         </div>
@@ -27,35 +38,35 @@
             <div class="icon-placeholder ziwaixian"></div>
             <div>
               <p>紫外线指数</p>
-              <p>{{weatherInfoData.ultravioletRays}}级</p>
+              <p>{{ weatherInfoData.ultravioletRays }}级</p>
             </div>
           </div>
           <div class="detail-item">
             <div class="icon-placeholder tigan"></div>
             <div>
               <p>体感温度</p>
-              <p>{{weatherInfoData.appTemp}}°C</p>
+              <p>{{ weatherInfoData.appTemp }}°C</p>
             </div>
           </div>
           <div class="detail-item">
             <div class="icon-placeholder nengjiandu"></div>
             <div>
               <p>能见度</p>
-              <p>{{weatherInfoData.visibility}}km</p>
+              <p>{{ weatherInfoData.visibility }}km</p>
             </div>
           </div>
           <div class="detail-item">
             <div class="icon-placeholder jiangyuliang"></div>
             <div>
               <p>降水量</p>
-              <p>{{weatherInfoData.precipitation}}mm</p>
+              <p>{{ weatherInfoData.precipitation }}mm</p>
             </div>
           </div>
           <div class="detail-item">
             <div class="icon-placeholder qiya"></div>
             <div>
               <p>气压</p>
-              <p>{{weatherInfoData.pressure}}mb</p>
+              <p>{{ weatherInfoData.pressure }}mb</p>
             </div>
           </div>
         </div>
@@ -68,6 +79,9 @@
 import ContentCar from "@/components/contentCar/index.vue";
 import { ref, reactive, onMounted, nextTick } from "vue";
 import { weatherInfo } from "./api";
+
+import seaCode from "@/assets/seaCode.json";
+import { getImageUrl } from "@/utils/image";
 
 const weatherInfoData = ref({
   appTemp: 35.3,
@@ -101,6 +115,18 @@ const weatherInfoData = ref({
   windMark: "南",
   windSpeed: 4.6,
 });
+
+const getWeatherIcon = (code: number) => {
+  return getImageUrl(`img/icon/${code}.png`);
+};
+const getJsonLevel = (value: number, type: string) => {
+  for (let item of seaCode[type]) {
+    if (value >= item.range.min && value <= item.range.max) {
+      return item;
+    }
+  }
+  return item;
+};
 // weatherInfo
 onMounted(() => {
   weatherInfo().then((res: any) => {
@@ -151,7 +177,6 @@ onMounted(() => {
       border-radius: 50%;
       margin-right: 20px;
       margin-left: 20px;
-      background-image: url("@/assets/img/weather/qintian.png");
       background-size: 100% 100%;
       background-position: center center;
       background-repeat: no-repeat;

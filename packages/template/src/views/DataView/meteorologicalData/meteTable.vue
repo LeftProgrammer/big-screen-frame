@@ -47,7 +47,7 @@
               placement="top"
             >
               <template #reference>
-                <div class="w-100pre text-left ml-5">
+                <div class="w-100pre text-left custom-text">
                   {{
                     getColumnName(
                       scope.row[col.dataIndex],
@@ -112,7 +112,7 @@
                         <el-avatar
                           style="margin-right: 5px"
                           :size="16"
-                          :src="getIcon(scope.row.icon)"
+                          :src="getImageUrl(scope.row.icon)"
                         />
                         <span>{{ scope.row.index }}</span>
                       </div>
@@ -181,7 +181,7 @@
               placement="top"
             >
               <template #reference>
-                <div class="w-100pre text-left ml-5">
+                <div class="text-left ml-5" style="width: 100%;">
                   {{
                     getColumnName(
                       scope.row[col.dataIndex],
@@ -287,6 +287,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from "vue";
+import { getImageUrl } from "@/utils/image";
 
 import { processAssess, sailingAssess } from "./api";
 
@@ -556,7 +557,7 @@ const getAllData = async (type: string) => {
     tableData.value = sevenDaysTable[0];
     console.log("tableData", tableData.value);
   }
-    loading.value = false;
+  loading.value = false;
 };
 // 初始化
 onMounted(async () => {
@@ -587,6 +588,14 @@ onMounted(async () => {
     display: flex;
   }
 }
+
+::v-deep .el-table .cell:has(.custom-text) {
+  justify-content: left;
+  .custom-text {
+    margin-left: 10px;
+  }
+}
+
 ::v-deep .el-table {
   background: transparent;
   height: 410px;

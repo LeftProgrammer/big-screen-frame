@@ -15,7 +15,10 @@
         <div class="icon"></div>
         <div class="line"></div>
       </div>
-      <div class="description" v-html="projectInfoListData.remark"></div>
+      <div
+        class="description"
+        v-html="projectInfoListData.videoDescription"
+      ></div>
     </div>
     <div class="processVideo">
       <div
@@ -39,7 +42,7 @@
       </div>
       <div
         class="description"
-        v-html="projectInfoListData.processVideoRemark"
+        v-html="projectInfoListData.processVideoDescription"
       ></div>
     </div>
   </div>
@@ -52,20 +55,16 @@ import UtilVar from "@/config/UtilVar";
 const baseUrl = UtilVar.baseUrl;
 
 const projectInfoListData = ref({
-  remark: "",
+  videoDescription: "",
   video: "",
   processVideo: "",
-  processVideoRemark: "暂无字段",
+  processVideoDescription: "",
 });
 onMounted(async () => {
   const res = await projectInfoList();
-  console.log("res", res.result.records[0]);
+  console.log("projectInfoList", res.result.records);
   if (res.code === 200) {
-    // 合并 projectInfoListData res.result.records[0];
-    projectInfoListData.value = {
-      ...projectInfoListData.value,
-      ...res.result.records[0],
-    };
+    projectInfoListData.value = res.result.records[0];
   }
 });
 </script>

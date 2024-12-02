@@ -1,0 +1,404 @@
+{
+    "weather": {
+        "1000": "雷暴伴有小雨",
+        "1001": "雷暴伴有雨",
+        "1002": "雷暴伴有大雨",
+        "1003": "雷暴伴有毛毛雨",
+        "1006": "雷暴伴有冰雹",
+        "1007": "毛毛雨",
+        "1010": "小雨",
+        "1011": "中雨",
+        "1012": "大雨",
+        "1013": "冻雨",
+        "1014": "阵雨",
+        "1016": "小雪",
+        "1017": "雪",
+        "1018": "大雪",
+        "1019": "雨夹雪",
+        "1022": "阵雪",
+        "1025": "轻雾",
+        "1026": "烟幕",
+        "1027": "雾霾",
+        "1028": "沙尘暴",
+        "1029": "雾",
+        "1031": "晴天",
+        "1032": "少云",
+        "1033": "多云",
+        "1035": "阴天",
+        "1036": "未知降水"
+    },
+    "wind_levels": [
+        {
+            "level": 0,
+            "description": "无风",
+            "range": {
+                "min": 0,
+                "max": 0.2
+            }
+        },
+        {
+            "level": 1,
+            "description": "轻微风",
+            "range": {
+                "min": 0.3,
+                "max": 1.5
+            }
+        },
+        {
+            "level": 2,
+            "description": "轻风",
+            "range": {
+                "min": 1.6,
+                "max": 3.3
+            }
+        },
+        {
+            "level": 3,
+            "description": "微风",
+            "range": {
+                "min": 3.4,
+                "max": 5.4
+            }
+        },
+        {
+            "level": 4,
+            "description": "和风",
+            "range": {
+                "min": 5.5,
+                "max": 7.9
+            }
+        },
+        {
+            "level": 5,
+            "description": "清风",
+            "range": {
+                "min": 8.0,
+                "max": 10.7
+            }
+        },
+        {
+            "level": 6,
+            "description": "强风",
+            "range": {
+                "min": 10.8,
+                "max": 13.8
+            }
+        },
+        {
+            "level": 7,
+            "description": "疾风",
+            "range": {
+                "min": 13.9,
+                "max": 17.1
+            }
+        },
+        {
+            "level": 8,
+            "description": "大风",
+            "range": {
+                "min": 17.2,
+                "max": 20.7
+            }
+        },
+        {
+            "level": 9,
+            "description": "烈风",
+            "range": {
+                "min": 20.8,
+                "max": 24.4
+            }
+        },
+        {
+            "level": 10,
+            "description": "狂风",
+            "range": {
+                "min": 24.5,
+                "max": 28.4
+            }
+        },
+        {
+            "level": 11,
+            "description": "暴风",
+            "range": {
+                "min": 28.5,
+                "max": 32.6
+            }
+        },
+        {
+            "level": 12,
+            "description": "台风",
+            "range": {
+                "min": 32.7,
+                "max": 36.9
+            }
+        },
+        {
+            "level": 13,
+            "description": "台风",
+            "range": {
+                "min": 37.0,
+                "max": 41.4
+            }
+        },
+        {
+            "level": 14,
+            "description": "强台风",
+            "range": {
+                "min": 41.5,
+                "max": 46.1
+            }
+        },
+        {
+            "level": 15,
+            "description": "强台风",
+            "range": {
+                "min": 46.2,
+                "max": 50.9
+            }
+        },
+        {
+            "level": 16,
+            "description": "超强台风",
+            "range": {
+                "min": 51.0,
+                "max": 56.0
+            }
+        },
+        {
+            "level": 17,
+            "description": "超强台风",
+            "range": {
+                "min": 56.1,
+                "max": 61.2
+            }
+        },
+        {
+            "level": 18,
+            "description": "超强台风",
+            "range": {
+                "min": 61.3,
+                "max": 9999
+            }
+        }
+    ],
+    "wave_height_levels": [
+        {
+            "level": "微浪",
+            "range": {
+                "min": 0,
+                "max": 0.1
+            }
+        },
+        {
+            "level": "小浪",
+            "range": {
+                "min": 0.1,
+                "max": 0.5
+            }
+        },
+        {
+            "level": "轻浪",
+            "range": {
+                "min": 0.5,
+                "max": 1.25
+            }
+        },
+        {
+            "level": "中浪",
+            "range": {
+                "min": 1.25,
+                "max": 2.5
+            }
+        },
+        {
+            "level": "大浪",
+            "range": {
+                "min": 2.5,
+                "max": 4.0
+            }
+        },
+        {
+            "level": "巨浪",
+            "range": {
+                "min": 4.0,
+                "max": 6.0
+            }
+        },
+        {
+            "level": "狂浪",
+            "range": {
+                "min": 6.0,
+                "max": 9.0
+            }
+        },
+        {
+            "level": "狂涛",
+            "range": {
+                "min": 9.0,
+                "max": 14.0
+            }
+        },
+        {
+            "level": "怒涛",
+            "range": {
+                "min": 14.0,
+                "max": 99999
+            }
+        }
+    ],
+    "wind_directions": [
+        {
+            "direction": "北",
+            "range": {
+                "min": 0,
+                "max": 11.25
+            },
+            "icon": "北",
+            "icon_angle": "0"
+        },
+        {
+            "direction": "北东北",
+            "range": {
+                "min": 11.25,
+                "max": 33.75
+            },
+            "icon": "北东北",
+            "icon_angle": "22.5"
+        },
+        {
+            "direction": "东北",
+            "range": {
+                "min": 33.75,
+                "max": 56.25
+            },
+            "icon": "东北",
+            "icon_angle": "45"
+        },
+        {
+            "direction": "东东北",
+            "range": {
+                "min": 56.25,
+                "max": 78.75
+            },
+            "icon": "东东北",
+            "icon_angle": "67.5"
+        },
+        {
+            "direction": "东",
+            "range": {
+                "min": 78.75,
+                "max": 101.25
+            },
+            "icon": "东",
+            "icon_angle": "90"
+        },
+        {
+            "direction": "东东南",
+            "range": {
+                "min": 101.25,
+                "max": 123.75
+            },
+            "icon": "东东南",
+            "icon_angle": "112.5"
+        },
+        {
+            "direction": "东南",
+            "range": {
+                "min": 123.75,
+                "max": 146.25
+            },
+            "icon": "东南",
+            "icon_angle": "135"
+        },
+        {
+            "direction": "南东南",
+            "range": {
+                "min": 146.25,
+                "max": 168.75
+            },
+            "icon": "南东南",
+            "icon_angle": "157.5"
+        },
+        {
+            "direction": "南",
+            "range": {
+                "min": 168.75,
+                "max": 191.25
+            },
+            "icon": "南",
+            "icon_angle": "180"
+        },
+        {
+            "direction": "南西南",
+            "range": {
+                "min": 191.25,
+                "max": 213.75
+            },
+            "icon": "南西南",
+            "icon_angle": "202.5"
+        },
+        {
+            "direction": "西南",
+            "range": {
+                "min": 213.75,
+                "max": 236.25
+            },
+            "icon": "西南",
+            "icon_angle": "225"
+        },
+        {
+            "direction": "西西南",
+            "range": {
+                "min": 236.25,
+                "max": 258.75
+            },
+            "icon": "西西南",
+            "icon_angle": "247.5"
+        },
+        {
+            "direction": "西",
+            "range": {
+                "min": 258.75,
+                "max": 281.25
+            },
+            "icon": "西",
+            "icon_angle": "270"
+        },
+        {
+            "direction": "西西北",
+            "range": {
+                "min": 281.25,
+                "max": 303.75
+            },
+            "icon": "西西北",
+            "icon_angle": "292.5"
+        },
+        {
+            "direction": "西北",
+            "range": {
+                "min": 303.75,
+                "max": 326.25
+            },
+            "icon": "西北",
+            "icon_angle": "315"
+        },
+        {
+            "direction": "北西北",
+            "range": {
+                "min": 326.25,
+                "max": 348.75
+            },
+            "icon": "北西北",
+            "icon_angle": "337.5"
+        },
+        {
+            "direction": "北",
+            "range": {
+                "min": 348.75,
+                "max": 360
+            },
+            "icon": "北",
+            "icon_angle": "360"
+        }
+    ]
+}

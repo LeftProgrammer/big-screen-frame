@@ -1,38 +1,66 @@
 <template>
   <div class="login-container">
-    <div class="background-animation"></div>
+    <!-- <div class="background-animation"></div> -->
     <div class="login-box">
       <div class="login-header">
-        <div class="login-title">广西钦州海上风电场EPC</div>
-        <div class="login-subtitle">总承包项目管理系统</div>
+        <div class="login-title">欢迎登录</div>
+        <!-- <div class="login-subtitle">总承包项目管理系统</div> -->
       </div>
       <form @submit.prevent="handleLogin" class="login-form">
-        <div class="input-group">
-          <label for="username">用户名</label>
-          <input
-            type="text"
-            id="username"
-            v-model="userInfo.username"
-            required
-          />
-          <div class="input-focus-effect"></div>
+        <div class="input-group input-username">
+          <!-- <label for="username">用户名</label> -->
+          <div class="input-username-box">
+            <input
+              type="text"
+              id="username"
+              v-model="userInfo.username"
+              required
+              placeholder="请输入用户名"
+            />
+          </div>
         </div>
-        <div class="input-group">
-          <label for="password">密码</label>
-          <input
-            type="password"
-            id="password"
-            v-model="userInfo.password"
-            required
-          />
-          <div class="input-focus-effect"></div>
+        <div class="input-group input-password">
+          <!-- <label for="password">密码</label> -->
+          <div class="input-password-box">
+            <div class="password-input-wrapper" style="position: relative">
+              <input
+                :type="showPassword ? 'text' : 'password'"
+                id="password"
+                v-model="userInfo.password"
+                required
+                placeholder="请输入密码"
+              />
+              <i
+                class="password-toggle"
+                @click="showPassword = !showPassword"
+                style="
+                  position: absolute;
+                  right: 10px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  cursor: pointer;
+                "
+              >
+                {{ showPassword ? "👁️" : "👁️‍🗨️" }}
+              </i>
+            </div>
+          </div>
         </div>
+        <!-- 记住我 -->
+        <!-- <div class="remember-me">
+          <input
+            type="checkbox"
+            id="remember-me"
+            style="accent-color: #1890ff"
+          />
+          <label for="remember-me">记住密码</label>
+        </div> -->
         <button
           type="submit"
           class="login-button"
           :class="{ loading: isLoading }"
         >
-          <span v-if="!isLoading">登录系统</span>
+          <span v-if="!isLoading">登 录</span>
           <span v-else class="loading-spinner"></span>
         </button>
       </form>
@@ -46,7 +74,6 @@ import { ref } from "vue";
 import { useUserStore } from "@/utils/userStore";
 import { useRouter } from "vue-router";
 
-
 const router = useRouter();
 const userStore = useUserStore();
 
@@ -58,7 +85,11 @@ const userInfo = ref({
   remember_me: true,
   username: "admin",
 });
-
+const showPassword = ref(false);
+const changePasswordType = () => {
+  console.log("changePasswordType");
+  showPassword.value = !showPassword.value;
+};
 
 const handleLogin = async () => {
   isLoading.value = true;
@@ -70,7 +101,51 @@ const handleLogin = async () => {
   }
 };
 </script>
-<style scoped>
+
+<style scoped lang="scss">
+input:focus {
+  background-color: #1150e5;
+}
+.password-toggle {
+  cursor: pointer;
+  color: #fff;
+  z-index: 999;
+}
+.input-username-box {
+  position: relative;
+}
+input#username {
+  padding: 10px 10px 10px 40px;
+}
+input#password {
+  padding: 10px 10px 10px 40px;
+}
+.input-username-box::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-image: url("../../assets/img/big-data/username.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  z-index: 999;
+}
+.input-password-box::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-image: url("../../assets/img/big-data/password.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  z-index: 999;
+}
 .login-container {
   display: flex;
   justify-content: center;
@@ -79,72 +154,22 @@ const handleLogin = async () => {
   background-color: transparent;
   overflow: hidden;
   position: relative;
-  width: 25vw;
-}
-.background-animation {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(
-      circle at 20% 35%,
-      rgba(4, 78, 144, 0.5) 0%,
-      transparent 25%
-    ),
-    radial-gradient(
-      circle at 75% 44%,
-      rgba(4, 78, 144, 0.5) 0%,
-      transparent 20%
-    );
-  filter: blur(60px);
-  opacity: 0.5;
-  animation: pulse 8s infinite alternate;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(1.1);
-  }
 }
 
 .login-box {
-  background: rgba(13, 23, 33, 0.8);
   border-radius: 10px;
-  padding: 40px;
-  width: 400px;
-  box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+  padding: 60px 20%;
+  width: 500px;
+  /* box-shadow: 0 0 20px rgba(0, 123, 255, 0.3); */
+  height: 430px;
   z-index: 1;
   animation: fadeIn 1s;
   position: relative;
   overflow: hidden;
-}
-
-.login-box::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: conic-gradient(
-    transparent,
-    rgba(24, 144, 255, 0.1),
-    transparent 30%
-  );
-  animation: rotate 4s linear infinite;
-}
-
-.login-box::after {
-  content: "";
-  position: absolute;
-  inset: 3px;
-  background: rgba(13, 23, 33, 0.8);
-  border-radius: 7px;
-  z-index: -1;
+  background-image: url("@/assets/img/big-data/login-form-bg.png");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 @keyframes fadeIn {
@@ -169,15 +194,29 @@ const handleLogin = async () => {
 
 .login-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 
 .login-title {
-  font-size: 24px;
-  color: #fff;
-  margin-bottom: 10px;
-  font-weight: bold;
-  text-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+  font-family: "AlibabaPuHuiTi-2-65-Medium";
+  font-weight: normal;
+  font-size: 28px;
+  color: #ffffff;
+  line-height: 33px;
+  text-align: center;
+  font-style: normal;
+  text-transform: none;
+  position: relative;
+}
+.login-title::before {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  width: 72px;
+  height: 2px;
+  background: linear-gradient(180deg, #2d6fdf 0%, #052d70 100%);
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .login-subtitle {
@@ -191,8 +230,12 @@ const handleLogin = async () => {
 }
 
 .input-group {
-  margin-bottom: 20px;
   position: relative;
+  margin-bottom: 15px;
+}
+
+.input-password {
+  margin-bottom: 50px;
 }
 
 label {
@@ -214,29 +257,14 @@ input {
   z-index: 1;
 }
 
-.input-focus-effect {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: #1890ff;
-  transition: all 0.3s;
-}
-
-input:focus + .input-focus-effect {
-  width: 100%;
-  left: 0;
-}
-
 .login-button {
-  background: linear-gradient(45deg, #1890ff, #4a90e2);
+  background: #2176ff;
   color: white;
   border: none;
   padding: 12px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 26px;
   transition: all 0.3s;
   position: relative;
   overflow: hidden;

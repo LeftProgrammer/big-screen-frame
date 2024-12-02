@@ -27,3 +27,14 @@ export const ProjectInfo = (params: any = {}) => {
 export const queryTreeList = (params: any = {}) => {
     return GET(api + '/project/myCategory/queryTreeList', params)
 };
+
+
+
+/**系统项目信息 */
+export const projectInfoList = () => {
+    return GET(api + '/project/projectInfo/list', {})
+}
+/**获取数据(风机 海缆 升压站) */
+export const getBaseMapData = () => {
+    return GET(api + '/project/projectPbs/getBaseMapData', {})
+}

@@ -47,6 +47,10 @@
     <div class="control-container">
       <div class="back-top"></div>
       <div class="back-center" @click="backCenter"></div>
+      <div class="lng-lat">
+        <span class="lng-lat-item">经度：{{ lng }}</span>
+        <span class="lng-lat-item">纬度：{{ lat }}</span>
+      </div>
     </div>
     <InfoWindow
       class="InfoWindowContainer"
@@ -63,6 +67,9 @@ import InfoWindow from "./InfoWindow.vue";
 // 底图对象
 const Map = ref();
 const shipData = ref({});
+
+const lng = ref(108.76236);
+const lat = ref(21.44643);
 
 // 点击船舶
 const clickShip = (mark: any) => {
@@ -92,6 +99,10 @@ onMounted(async () => {
       }
       console.log("markCallback");
     },
+    (lnglat, markerType) => {
+      lng.value = lnglat.lng;
+      lat.value = lnglat.lat;
+    },
     clickShip
   );
   if (map) {
@@ -119,6 +130,20 @@ onMounted(async () => {
     z-index: 9999;
   }
 
+  .lng-lat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    color: #dee9ff;
+    position: absolute;
+    bottom: -73px;
+    left: 120px;
+    font-size: 14px;
+    .lng-lat-item {
+      padding-right: 20px;
+    }
+  }
   .control-container {
     position: absolute;
     z-index: 9999;
@@ -127,7 +152,6 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    // 以自己为圆心 旋转60度
 
     .back-top {
       width: 32px;
@@ -152,7 +176,7 @@ onMounted(async () => {
 ::v-deep .tdt-marker-pane > img {
   //   以自己为中心旋转
   transform-origin: 36% 51% !important;
-//   transform: rotate(141deg) !important;
+  //   transform: rotate(141deg) !important;
 }
 
 ::v-deep .tdt-marker-pane {

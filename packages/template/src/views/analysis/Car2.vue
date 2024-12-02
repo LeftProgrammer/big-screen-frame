@@ -120,6 +120,14 @@ const option = ref({
         borderRadius: [5, 5, 0, 0], // 给背景添加圆角
       },
       z: 2,
+      emphasis: {
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: "#1890ff" }, // 鼠标悬停时的颜色
+            { offset: 1, color: "rgba(24,144,255,0)" },
+          ]),
+        },
+      },
     },
     {
       name: "出海船舶",
@@ -139,6 +147,7 @@ const option = ref({
     },
   ],
 });
+
 const updateChart = (newOption: any) => {
   if (chartRef.value) {
     chartRef.value.setOption(newOption);
@@ -162,7 +171,16 @@ const setXAxisData = () => {
   updateChart(option.value);
 };
 setXAxisData();
-// 出海人员
+// 添加点击事件处理函数
+const handleBarClick = (params: any) => {
+  // 只处理出海人员的点击
+  console.log("只处理出海人员的点击", params);
+  if (params.seriesName !== "出海人员") return;
+  
+  // 在这里添加你的自定义业务逻辑
+  // 例如：打开弹窗、跳转页面等
+};
+// 在 Chart 组件上添加事件监听
 onMounted(() => {
   weekWork().then((res: any) => {
     console.log("近七日出海船舶", res);
@@ -170,6 +188,17 @@ onMounted(() => {
       option.value.series[0].data = res.result.worker;
       option.value.series[1].data = res.result.ship;
       updateChart(option.value);
+
+      // 添加点击事件监听
+      nextTick(() => {
+        if (chartRef.value) {
+          const chart = chartRef.value.chart;
+          // 移除可能存在的旧事件监听
+          chart.off("click");
+          // 添加新的事件监听
+          chart.on("click", handleBarClick);
+        }
+      });
     }
   });
 });

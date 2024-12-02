@@ -2,7 +2,7 @@
   <div class="page-meteorologicalData">
     <!-- 近七日气象数据 -->
     <div class="title">近七日气象数据</div>
-    <div class="top">
+    <div class="top" @mouseenter="stopAutoSwitch" @mouseleave="startAutoSwitch">
       <div class="weatherType">
         <div
           :class="{ weatherTypeItemSelected: currentType == item.type }"
@@ -25,17 +25,19 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, onMounted, nextTick } from "vue";
+import { ref, reactive, onMounted, nextTick, onUnmounted } from "vue";
 import Chart from "@/components/echart/chart.vue";
 import meteTable from "./meteTable.vue";
 import { EChartsCoreOption } from "echarts";
+
+import moment from "moment";
 
 import { getWeather7days } from "./api";
 
 const weather7daysType = ref<any[]>([
   {
     name: "气温",
-    type: "highTemperature",
+    type: "temperature",
   },
   {
     name: "风速",
@@ -56,11 +58,12 @@ const weather7daysType = ref<any[]>([
 ]);
 
 const weather7daysData = ref<any[]>([]);
-const currentType = ref<string>("highTemperature");
+const currentType = ref<string>("temperature");
+const timer = ref<NodeJS.Timer | null>(null);
 
 const formatterUnit = () => {
   switch (currentType.value) {
-    case "highTemperature":
+    case "temperature":
       return "°C";
     case "windSpeed":
       return "m/s";
@@ -78,17 +81,31 @@ const formatterUnit = () => {
 const chartRef = ref(null);
 const echartOption = ref<EChartsCoreOption>({
   tooltip: {
-    trigger: "axis",
+    trigger: "axis", // 设置触发类型为坐标轴触发
+    formatter: (params: any) => {
+      // params 是一个数组，包含着该点所有数据信息
+      let xValue = moment(Number(params[0].axisValue)).format(
+        "YYYY-MM-DD HH:mm:ss"
+      ); // x 轴数据
+      let yValue = params[0].value; // y 轴数据
+      return `
+              <div >
+                <div style="margin-bottom:10px;font-size: 14px;">${yValue}${formatterUnit()}</div>
+                <div style='color: #86909C;font-size: 12px;'>${xValue}</div>
+              </div>
+              `;
+    },
   },
   grid: {
-    top: "10%",
+    top: "3%",
     left: "2%",
     right: "2%",
     bottom: "0%",
     containLabel: true,
   },
   xAxis: {
-    type: "category",
+    type: "category", 
+    splitNumber: 100, // 刻度数量
     boundaryGap: false,
     axisLine: {
       lineStyle: {
@@ -96,13 +113,17 @@ const echartOption = ref<EChartsCoreOption>({
       },
     },
     axisLabel: {
-      // 往下偏移
       margin: 20,
-      color: "#90BEFF",
+      color: "#90BEFF", // 设置X轴刻度文字颜色为白色
+      fontSize: 12,
     },
+    axisTick: {
+      show: false, // 隐藏 X 轴的刻度线
+    },
+    
     data: [
       "1970-01-01",
-      "1970-01-02",
+      "1970-01-02", 
       "1970-01-03",
       "1970-01-04",
       "1970-01-05",
@@ -113,11 +134,6 @@ const echartOption = ref<EChartsCoreOption>({
   yAxis: {
     type: "value",
     show: true,
-    name: `(°C)`,
-    nameTextStyle: {
-      color: "#90BEFF",
-      padding: [0, 0, 0, -35], // 调整单位文字位置
-    },
     axisLine: {
       show: true,
       lineStyle: {
@@ -173,31 +189,117 @@ const echartOption = ref<EChartsCoreOption>({
 const setEcharts = (type: string) => {
   currentType.value = type;
   // 从weather7daysData中根据type获取数据
-  const data = weather7daysData.value.map((item) => item[type]);
+  const data = weather7daysData.value[type];
   echartOption.value.series[0].data = data;
-  //   设置单位
-  echartOption.value.yAxis.name = `(${formatterUnit()})`;
+  echartOption.value.yAxis.axisLabel.formatter = (value: number) => {
+    return `${value}${formatterUnit()}`;
+  };
+  echartOption.value.yAxis.min = 0;
+  if (type == "temperature") {
+    echartOption.value.yAxis.min = -10;
+    echartOption.value.yAxis.max = 40;
+  } else if (type == "windSpeed") {
+    echartOption.value.yAxis.max = 35;
+  } else if (type == "waveHeight") {
+    echartOption.value.yAxis.max = 5;
+  } else if (type == "precipitation") {
+    echartOption.value.yAxis.max = 40;
+  } else {
+    echartOption.value.yAxis.max = null;
+  }
+
+  echartOption.value.xAxis.axisLabel = {
+    hideOverlap: true,
+    interval: 0,
+    margin: 20,
+    color: "#90BEFF", // 设置X轴刻度文字颜色为白色
+    fontSize: 12,
+    formatter: (value, index) => {
+      if (index === 0) {
+        return moment(Number(value)).format("YYYY-MM-DD"); // 第一个刻度始终显示
+      } else {
+        let xOption = echartOption.value.xAxis.data[index - 1];
+        const prevValue = moment(xOption).format("YYYY-MM-DD");
+        let day = moment(Number(value)).format("YYYY-MM-DD");
+        if (day !== prevValue) {
+          return day; // 与前一个刻度不同的日期才显示标签
+        } else {
+          return ""; // 与前一个刻度相同的日期不显示标签
+        }
+      }
+    },
+  };
+
   console.log(type, data);
   if (chartRef.value) {
     chartRef.value.setOption(echartOption.value);
   }
 };
-const initEcharts = () => {};
+// 添加自动切换函数
+const autoSwitch = () => {
+  const types = weather7daysType.value;
+  const currentIndex = types.findIndex(
+    (item) => item.type === currentType.value
+  );
+  const nextIndex = (currentIndex + 1) % types.length;
+  setEcharts(types[nextIndex].type);
+};
+
+// 开始自动切换
+const startAutoSwitch = () => {
+  if (!timer.value) {
+    timer.value = setInterval(autoSwitch, 5000);
+  }
+};
+
+// 停止自动切换
+const stopAutoSwitch = () => {
+  if (timer.value) {
+    clearInterval(timer.value);
+    timer.value = null;
+  }
+};
+
 onMounted(async () => {
   // 初始化
-  initEcharts();
   const res = await getWeather7days();
   if (res.code === 200) {
-    console.log("近七日气象数据", res.result.week);
-    weather7daysData.value = res.result.week;
-    // 日期
-    const date = weather7daysData.value.map((item) => {
-      const str = item.day.toString();
-      return `${str.slice(0, 4)}-${str.slice(4, 6)}-${str.slice(6, 8)}`;
+    console.log("近七日气象数据", res.result);
+    const { hours, now, today } = res.result;
+
+    // 准备X轴
+    let xName: string[] = [];
+
+    let temperature: number[] = [];
+    let windSpeed: number[] = [];
+    let visibility: number[] = [];
+    let waveHeight: number[] = [];
+    let precipitation: number[] = [];
+    hours.forEach((item: any) => {
+      temperature.push(item.temperature);
+      xName.push(item.timestamp);
+      windSpeed.push(item.windSpeed);
+      visibility.push(item.visibility);
+      waveHeight.push(item.waveHeight);
+      precipitation.push(item.precipitation);
     });
-    echartOption.value.xAxis.data = date;
-    setEcharts("highTemperature");
+
+    weather7daysData.value = {
+      temperature,
+      windSpeed,
+      visibility,
+      waveHeight,
+      precipitation,
+    };
+    // 日期
+    echartOption.value.xAxis.data = xName;
+    setEcharts("temperature");
   }
+  startAutoSwitch(); // 开始自动切换
+});
+
+onUnmounted(() => {
+  stopAutoSwitch(); // 组件销毁时清除定时器
 });
 </script>
 

@@ -35,7 +35,7 @@ const props = defineProps({
       position: absolute;
       top: -10px;
       left: 28px;
-      width: 100%;
+      // width: 100%;
       height: 100%;
       color: #fff;
       font-size: 20px;
