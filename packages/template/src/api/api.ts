@@ -1,8 +1,12 @@
-
+/*
+ * @LastEditors: 刘嘉威 daidaibg@163.com
+ * @LastEditTime: 2024-03-28 16:52:31
+ */
 import axios from "axios";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
+import { StorageEnum, RequestEnum } from "@/enums";
+import { getLocalStorage } from "@/utils";
 
-import { useUserStore } from "@/utils/userStore";
 import UtilVar from "../config/UtilVar";
 let baseUrl = UtilVar.baseUrl;
 const CancelToken = axios.CancelToken;
@@ -13,12 +17,10 @@ export { baseUrl };
 axios.interceptors.request.use(
   function (config: AxiosRequestConfig): any {
     // 在发送请求之前做些什么 传token
-
-    let token: any = useUserStore().getUserToken
-    console.log("token", token);
+    let token: any = getLocalStorage(StorageEnum.GB_TOKEN_STORE);
     if (token) {
       // @ts-ignore
-      config.headers['X-Access-Token'] = token
+      config.headers.common[RequestEnum.GB_TOKEN_KEY] = token;
     }
     // @ts-ignore
     config.headers["Content-Type"] = "application/json;charset=utf-8";
@@ -43,7 +45,7 @@ export type FileConfig = {
  */
 axios.interceptors.response.use(
   (response: AxiosResponse) => {
-    console.log("response", response);
+    // console.log("response", response);
     if (response.status !== 200) {
       return Promise.reject(response);
     }

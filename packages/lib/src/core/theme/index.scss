@@ -1,26 +1,33 @@
-// theme.scss
-$primary-color-light: #3498db;
-$background-color-light: #ffffff;
-$text-color-light: #333333;
+// src/assets/styles/theme.scss
 
-$primary-color-dark: #1abc9c;
-$background-color-dark: #2c3e50;
-$text-color-dark: #ecf0f1;
+// 默认亮色模式主题色
+$primary-color: #007bff; // 主色
+$secondary-color: #6c757d; // 辅助色
+$background-color: #ffffff; // 背景色
+$text-color: #333; // 文字色
 
-@mixin theme-styles($primary-color, $background-color, $text-color) {
+// 暗色模式主题色
+$dark-primary-color: #1e90ff;
+$dark-secondary-color: #343a40;
+$dark-background-color: #121212;
+$dark-text-color: #f1f1f1;
+
+// 全局样式
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
   background-color: $background-color;
   color: $text-color;
-  
-  .btn-primary {
-    background-color: $primary-color;
-    color: #fff;
-  }
+  transition: all 0.3s ease; // 添加过渡效果，使切换更流畅
 }
 
-.light-theme {
-  @include theme-styles($primary-color-light, $background-color-light, $text-color-light);
-}
-
-.dark-theme {
-  @include theme-styles($primary-color-dark, $background-color-dark, $text-color-dark);
+// 用于动态更新颜色
+:root {
+  --primary-color: #{$primary-color};
+  --secondary-color: #{$secondary-color};
+  --background-color: #{$background-color};
+  --text-color: #{$text-color};
 }

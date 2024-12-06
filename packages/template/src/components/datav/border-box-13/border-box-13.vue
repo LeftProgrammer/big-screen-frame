@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, onBeforeUpdate, nextTick } from "vue";
+import { computed, ref ,onBeforeUpdate, nextTick} from "vue";
 import { merge } from "lodash-es";
-import { useElementSize } from "@vueuse/core";
+import { useElementSize  } from "@vueuse/core";
 import type { PropType } from "vue";
 
 const props = defineProps({
@@ -16,14 +16,12 @@ const props = defineProps({
 });
 const defaultColor = ["#6586ec", "#2cf7fe"];
 const domRef = ref(null);
-const { width, height } = useElementSize(
-  domRef,
-  { width: 0, height: 0 },
-  { box: "border-box" }
-);
+const { width, height } = useElementSize(domRef,{width:0,height:0}, { box: 'border-box' });
 const mergedColor = computed<[string, string]>(() => {
   return merge(defaultColor, props.color);
 });
+
+
 </script>
 
 <template>

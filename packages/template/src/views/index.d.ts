@@ -3,7 +3,6 @@ export interface DateDataType {
     dateYear: string,
     dateWeek: string,
     timing: NodeJS.Timer
-    nowTime: string,
 }   
 
 interface CountUpOptions {
