@@ -1,0 +1,13 @@
+.DS_Store
+node_modules
+coverage
+tests
+examples
+docs
+.env*
+.eslintrc.js
+.eslintignore
+.prettierrc
+*.log
+*.config.js
+tsconfig*.json

@@ -1,53 +1,149 @@
 {
-	"name": "@jinghe/jinghe-lanhai",
-	"version": "1.0.0",
-	"description": "",
-	"author": "",
-	"type": "module",
-	"private": false,
-	"main": "dist/index.cjs",
-	"module": "dist/index.mjs",
-	"types": "types/index.d.ts",
-	"exports": {
-	  ".": {
-		"types": "./types/index.d.ts",
-		"import": "./dist/index.mjs",
-		"require": "./dist/index.cjs"
-	  },
-	  "./*": "./*"
-	},
-	"files": [
-	  "dist",
-	  "types",
-	  "README.md"
-	],
-	"scripts": {
-	  "dev": "pnpm --parallel vite",
-	  "dev-types": "vue-tsc --noEmit -p tsconfig.app.json --watch",
-	  "build": "pnpm build-lib && pnpm build-types",
-	  "build-lib": "vite build",
-	  "build-types": "vue-tsc --emitDeclarationOnly --declaration --noEmit false -p tsconfig.app.json",
-	  "test": "vitest",
-	  "test-ci": "vitest --run",
-
-	  "npm-publish": "npm publish --access public --no-git-checks",
-  	  "publish": "pnpm run build && pnpm run npm-publish"
-	},
-	"peerDependencies": {
-	  "vue": "^3.4.21"
-	},
-	"dependencies": {
-	  "axios": "^1.6.8",
-	  "dayjs": "^1.11.10",
-	  "lodash-es": "^4.17.21",
-	  "element-plus": "^2.6.2",
-	  "pinia": "^2.1.7"
-	},
-	"devDependencies": {
-	  "vite": "^5.2.6",
-	  "vue-tsc": "^2.0.7",
-	  "typescript": "^5.4.3",
-	  "vitest": "^0.34.6"
-	}
-  }
-  
+  "name": "@jinghe/jinghe-lanhai",
+  "version": "1.0.0",
+  "description": "A Vue 3 based big screen framework",
+  "author": "jinghe",
+  "type": "module",
+  "private": false,
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./core": {
+      "types": "./types/core.d.ts",
+      "import": "./dist/core.mjs",
+      "require": "./dist/core.cjs"
+    },
+    "./components": {
+      "types": "./types/components.d.ts",
+      "import": "./dist/components.mjs",
+      "require": "./dist/components.cjs"
+    },
+    "./application": {
+      "types": "./types/application.d.ts",
+      "import": "./dist/application.mjs",
+      "require": "./dist/application.cjs"
+    },
+    "./style": "./dist/style.css"
+  },
+  "files": [
+    "dist",
+    "types",
+    "README.md"
+  ],
+  "scripts": {
+    "clean": "rimraf dist types",
+    "dev": "vite",
+    "dev:example": "vite examples",
+    "dev:types": "vue-tsc --noEmit -p tsconfig.app.json --watch",
+    "build": "pnpm clean && pnpm build-lib && pnpm build-types",
+    "build:analyze": "cross-env ANALYZE=true vite build",
+    "build-lib": "vite build",
+    "build-types": "vue-tsc --emitDeclarationOnly --declaration --noEmit false -p tsconfig.app.json",
+    "test": "vitest",
+    "test:ci": "vitest --run",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts,.vue",
+    "lint:fix": "eslint src --ext .ts,.vue --fix",
+    "format": "prettier --write \"src/**/*.{ts,vue,scss}\"",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs",
+    "commit": "git-cz",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "release": "standard-version",
+    "prerelease": "pnpm test && pnpm build",
+    "npm-publish": "npm publish --access public --no-git-checks",
+    "publish": "pnpm run build && pnpm run npm-publish"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.21"
+  },
+  "dependencies": {
+    "@vueuse/core": "^10.9.0",
+    "axios": "^1.6.8",
+    "countup.js": "^2.8.0",
+    "dayjs": "^1.11.10",
+    "echarts": "^5.5.0",
+    "element-plus": "^2.6.2",
+    "lodash-es": "^4.17.21",
+    "pinia": "^2.1.7",
+    "vue-router": "^4.3.0",
+    "vue-types": "^5.1.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
+    "@types/echarts": "^4.9.22",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^20.11.30",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vue/compiler-sfc": "^3.4.21",
+    "@vue/eslint-config-prettier": "^9.0.0",
+    "@vue/eslint-config-typescript": "^12.0.0",
+    "@vue/test-utils": "^2.4.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.56.0",
+    "eslint-plugin-vue": "^9.21.1",
+    "prettier": "^3.2.5",
+    "rimraf": "^5.0.5",
+    "rollup-plugin-visualizer": "^5.12.0",
+    "sass": "^1.72.0",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.6",
+    "vite-plugin-dts": "^3.7.3",
+    "vitepress": "^1.0.0",
+    "vitest": "^0.34.6",
+    "vue-tsc": "^2.0.7"
+  },
+  "keywords": [
+    "vue3",
+    "typescript",
+    "big-screen",
+    "dashboard",
+    "visualization"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-repo/jinghe-lanhai.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,vue}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{scss,less,css,html,md}": [
+      "prettier --write"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-conventional-changelog"
+    }
+  },
+  "standard-version": {
+    "skip": {
+      "tag": true
+    }
+  },
+  "sideEffects": [
+    "dist/*",
+    "*.scss",
+    "*.css"
+  ]
+}
