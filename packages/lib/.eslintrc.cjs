@@ -3,15 +3,18 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es2021: true
+    es2022: true,
   },
   extends: [
-    'plugin:vue/vue3-recommended',
     'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:vue/vue3-recommended',
     '@vue/typescript/recommended'
   ],
   parserOptions: {
-    ecmaVersion: 2021
+    ecmaVersion: 2022,
+    parser: '@typescript-eslint/parser',
+    sourceType: 'module'
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

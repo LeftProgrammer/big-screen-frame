@@ -43,7 +43,7 @@
     "preview": "vite preview --port 4173",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint src --ext .ts,.vue",
+    "lint": "eslint \"src/**/*.{ts,tsx,vue}\" --fix",
     "type-check": "vue-tsc --noEmit",
     "clean": "rimraf dist types",
     "prepublishOnly": "pnpm run clean && pnpm run build && pnpm run build:types"
