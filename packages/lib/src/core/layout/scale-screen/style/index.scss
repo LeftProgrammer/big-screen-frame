@@ -1,0 +1,10 @@
+@use '@/styles/base/variables' as *;
+@use '@/styles/base/mixins' as *;
+
+.v-screen-box {
+  position: absolute;
+  transform-origin: 0 0;
+  transition: transform 0.3s;
+  background-color: var(--screen-background, $screen-background);
+  overflow: hidden;
+}

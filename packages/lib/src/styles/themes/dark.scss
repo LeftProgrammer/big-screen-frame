@@ -1,0 +1,25 @@
+// 暗色主题变量
+[data-theme='dark'] {
+  // 品牌色
+  --primary-color: #409EFF;
+  --success-color: #67C23A;
+  --warning-color: #E6A23C;
+  --danger-color: #F56C6C;
+  --info-color: #909399;
+
+  // 文字颜色
+  --text-primary: #E5EAF3;
+  --text-regular: #CFD3DC;
+  --text-secondary: #A3A6AD;
+  --text-placeholder: #8D9095;
+
+  // 边框颜色
+  --border-color-base: #4C4D4F;
+  --border-color-light: #363637;
+  --border-color-lighter: #2B2B2C;
+  --border-color-extra-light: #1D1D1D;
+
+  // 背景颜色
+  --background-color-base: #0A0A0A;
+  --screen-background: #000;
+}

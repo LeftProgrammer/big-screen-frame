@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { RouterView } from "vue-router";
-// import ScaleScreen from "@/components/scale-screen";
-import { ScaleScreen } from "@jinghe/jinghe-lanhai"
+import ScaleScreen from "@/components/scale-screen";
+// import { ScaleScreen } from "@jinghe/jinghe-lanhai"
 import Headers from "./header.vue";
 import Setting from "./setting.vue";
 import { useSettingStore } from "@/stores/index";
