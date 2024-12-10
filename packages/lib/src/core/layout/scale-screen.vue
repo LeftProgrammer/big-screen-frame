@@ -1,8 +1,8 @@
 <template>
-  <div 
+  <div
     ref="screenRef"
     class="v-screen-box"
-    :style="{ 
+    :style="{
       width: `${width}px`,
       height: `${height}px`,
       transform: `scale(${scale}) translate(-50%, -50%)`,
@@ -15,90 +15,97 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue';
 
-const props = withDefaults(defineProps<{
-  width: number
-  height: number
-  delay?: number
-}>(), {
-  width: 1920,
-  height: 1080,
-  delay: 100
-})
+const props = withDefaults(
+  defineProps<{
+    width: number;
+    height: number;
+    delay?: number;
+  }>(),
+  {
+    width: 1920,
+    height: 1080,
+    delay: 100
+  }
+);
 
 // 定义事件
 const emit = defineEmits<{
-  scale: [scale: number]
-  resize: [width: number, height: number]
-  fullscreen: [isFullscreen: boolean]
-}>()
+  scale: [scale: number];
+  resize: [width: number, height: number];
+  fullscreen: [isFullscreen: boolean];
+}>();
 
 // 屏幕容器引用
-const screenRef = ref<HTMLElement>()
+const screenRef = ref<HTMLElement>();
 
 // 缩放比例
-const scale = ref(1)
+const scale = ref(1);
 
 // 计算缩放比例
 const calculateScale = () => {
-  if (!screenRef.value) return
+  if (!screenRef.value) return;
 
-  const parentElement = screenRef.value.parentElement
-  if (!parentElement) return
+  const parentElement = screenRef.value.parentElement;
+  if (!parentElement) return;
 
-  const { clientWidth, clientHeight } = parentElement
-  const widthRatio = clientWidth / props.width
-  const heightRatio = clientHeight / props.height
-  
+  const { clientWidth, clientHeight } = parentElement;
+  const widthRatio = clientWidth / props.width;
+  const heightRatio = clientHeight / props.height;
+
   // 取最小的缩放比例
-  scale.value = Math.min(widthRatio, heightRatio)
-  
+  scale.value = Math.min(widthRatio, heightRatio);
+
   // 触发事件
-  emit('scale', scale.value)
-  emit('resize', clientWidth, clientHeight)
-}
+  emit('scale', scale.value);
+  emit('resize', clientWidth, clientHeight);
+};
 
 // 防抖函数
-let resizeTimer: number | null = null
+let resizeTimer: number | null = null;
 const handleResize = () => {
   if (resizeTimer) {
-    window.clearTimeout(resizeTimer)
+    window.clearTimeout(resizeTimer);
   }
-  resizeTimer = window.setTimeout(calculateScale, props.delay)
-}
+  resizeTimer = window.setTimeout(calculateScale, props.delay);
+};
 
 // 全屏变化处理
 const handleFullscreenChange = () => {
-  const isFullscreen = document.fullscreenElement !== null
-  emit('fullscreen', isFullscreen)
-  calculateScale()
-}
+  const isFullscreen = document.fullscreenElement !== null;
+  emit('fullscreen', isFullscreen);
+  calculateScale();
+};
 
 // 生命周期钩子
 onMounted(() => {
-  calculateScale()
-  window.addEventListener('resize', handleResize)
-  document.addEventListener('fullscreenchange', handleFullscreenChange)
-})
+  calculateScale();
+  window.addEventListener('resize', handleResize);
+  document.addEventListener('fullscreenchange', handleFullscreenChange);
+});
 
 onUnmounted(() => {
   if (resizeTimer) {
-    window.clearTimeout(resizeTimer)
+    window.clearTimeout(resizeTimer);
   }
-  window.removeEventListener('resize', handleResize)
-  document.removeEventListener('fullscreenchange', handleFullscreenChange)
-})
+  window.removeEventListener('resize', handleResize);
+  document.removeEventListener('fullscreenchange', handleFullscreenChange);
+});
+</script>
+
+<script lang="ts">
+export default {
+  name: 'ScaleScreen'
+};
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/base/variables' as *;
-
 .v-screen-box {
-  position: absolute;
+  position: fixed;
   transform-origin: 0 0;
-  transition: transform 0.3s;
-  background-color: var(--screen-background, $screen-background);
   overflow: hidden;
+  z-index: 999;
+  background-color: var(--bsf-bg-color-base);
 }
 </style>

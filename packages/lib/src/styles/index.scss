@@ -1,8 +1,53 @@
-// 导入基础样式
-@use 'base/variables' as *;
-@import 'base/mixins';
-@import 'base/reset';
+/**
+ * 基础样式系统入口文件
+ */
 
-// 导入主题
-@import 'themes/default';
-@import 'themes/dark';
+// 1. normalize.css - 确保跨浏览器的一致性
+@import './base/normalize';
+
+// 2. 变量定义 - 必须在其他样式之前
+@import './base/variables';
+
+// 3. 混入函数
+@import './base/mixins';
+
+// 4. 工具类
+@import './base/utilities';
+
+// 5. Element Plus 集成（可选）
+@import './vendors/element-plus';
+
+// 6. 主题样式
+@import './themes/index';
+
+// 全局基础样式
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  font-size: var(--bsf-font-size-base);
+  line-height: 1.5;
+  color: var(--bsf-text-color-primary);
+  background-color: var(--bsf-bg-color-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// 滚动条样式
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bsf-bg-color-light);
+  border-radius: var(--bsf-radius-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bsf-border-color-base);
+  border-radius: var(--bsf-radius-base);
+
+  &:hover {
+    background: var(--bsf-border-color-light);
+  }
+}

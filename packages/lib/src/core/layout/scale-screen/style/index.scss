@@ -1,7 +1,7 @@
-@use '@/styles/base/variables' as *;
-@use '@/styles/base/mixins' as *;
+@use '../../../../styles/themes/variables' as *;
+@use '../../../../styles/base/mixins' as *;
 
-.v-screen-box {
+.#{$namespace}-scale-screen {
   position: absolute;
   transform-origin: 0 0;
   transition: transform 0.3s;

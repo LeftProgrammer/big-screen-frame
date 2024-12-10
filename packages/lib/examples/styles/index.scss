@@ -1,0 +1,73 @@
+// 示例项目全局样式
+body {
+  margin: 0;
+  font-family: var(--bsf-font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--bsf-font-size-base);
+  color: var(--bsf-text-color-primary);
+  background-color: var(--bsf-bg-color-base);
+}
+
+// 滚动条样式
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bsf-bg-color-lighter);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bsf-border-color-darker);
+  border-radius: 3px;
+
+  &:hover {
+    background: var(--bsf-border-color-dark);
+  }
+}
+
+// 示例页面通用样式
+.example-page {
+  padding: 20px;
+
+  .page-header {
+    margin-bottom: 20px;
+
+    h1 {
+      font-size: var(--bsf-font-size-xl);
+      margin: 0 0 10px;
+    }
+
+    p {
+      color: var(--bsf-text-color-secondary);
+      margin: 0;
+    }
+  }
+
+  .page-content {
+    margin-bottom: 20px;
+  }
+
+  .example-section {
+    margin-bottom: 30px;
+
+    h2 {
+      font-size: var(--bsf-font-size-lg);
+      margin: 0 0 16px;
+    }
+
+    .example-block {
+      padding: 20px;
+      border: 1px solid var(--bsf-border-color);
+      border-radius: var(--bsf-radius-base);
+      background: var(--bsf-bg-color-light);
+
+      & + .example-block {
+        margin-top: 16px;
+      }
+    }
+  }
+}

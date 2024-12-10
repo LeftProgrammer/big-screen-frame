@@ -1,0 +1,15 @@
+/**
+ * 主题样式入口文件
+ */
+
+@use './variables' as *;
+@use './builder' as *;
+
+// 生成共享变量
+@include generate-shared-vars();
+
+// 生成暗色主题（默认主题）
+@include generate-theme('dark');
+
+// 生成亮色主题
+@include generate-theme('light');

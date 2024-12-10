@@ -1,44 +1,69 @@
-// 颜色系统
-$primary-color: #409EFF;
-$success-color: #67C23A;
-$warning-color: #E6A23C;
-$danger-color: #F56C6C;
-$info-color: #909399;
+/**
+ * CSS变量定义 - 默认变量，可被主题覆盖
+ */
 
-// 文字颜色
-$text-primary: #303133;
-$text-regular: #606266;
-$text-secondary: #909399;
-$text-placeholder: #C0C4CC;
+:root {
+  // 品牌色
+  --bsf-color-primary: #409eff;
+  --bsf-color-success: #67c23a;
+  --bsf-color-warning: #e6a23c;
+  --bsf-color-danger: #f56c6c;
+  --bsf-color-info: #909399;
 
-// 边框颜色
-$border-color-base: #DCDFE6;
-$border-color-light: #E4E7ED;
-$border-color-lighter: #EBEEF5;
-$border-color-extra-light: #F2F6FC;
+  // 文字颜色
+  --bsf-text-color-primary: #ffffff;
+  --bsf-text-color-regular: rgba(255, 255, 255, 0.85);
+  --bsf-text-color-secondary: rgba(255, 255, 255, 0.65);
+  --bsf-text-color-placeholder: rgba(255, 255, 255, 0.45);
 
-// 背景颜色
-$background-color-base: #F5F7FA;
-$screen-background: #000;
+  // 边框颜色
+  --bsf-border-color-base: rgba(255, 255, 255, 0.2);
+  --bsf-border-color-light: rgba(255, 255, 255, 0.15);
 
-// 字体大小
-$font-size-extra-large: 20px;
-$font-size-large: 18px;
-$font-size-medium: 16px;
-$font-size-base: 14px;
-$font-size-small: 13px;
-$font-size-extra-small: 12px;
+  // 背景颜色
+  --bsf-bg-color-base: #000000;
+  --bsf-bg-color-light: rgba(255, 255, 255, 0.04);
+  --bsf-bg-color-lighter: rgba(255, 255, 255, 0.08);
+  --bsf-mask-color: rgba(0, 0, 0, 0.5);
+  --bsf-screen-background: #000000; // 大屏背景色
 
-// 间距
-$spacing-extra-large: 32px;
-$spacing-large: 24px;
-$spacing-medium: 16px;
-$spacing-base: 12px;
-$spacing-small: 8px;
-$spacing-extra-small: 4px;
+  // 字体大小
+  --bsf-font-size-base: 14px;
+  --bsf-font-size-sm: 13px;
+  --bsf-font-size-lg: 16px;
 
-// 边框圆角
-$border-radius-base: 4px;
-$border-radius-small: 2px;
-$border-radius-round: 20px;
-$border-radius-circle: 100%;
+  // 间距
+  --bsf-spacing-sm: 8px;
+  --bsf-spacing-base: 12px;
+  --bsf-spacing-md: 16px;
+  --bsf-spacing-lg: 24px;
+
+  // 圆角
+  --bsf-radius-base: 4px;
+
+  // 过渡
+  --bsf-transition-base: all 0.3s ease-in-out;
+
+  // 大屏特有
+  --bsf-border-decoration-color: rgba(64, 158, 255, 0.5);
+  --bsf-border-decoration-glow: 0 0 10px rgba(64, 158, 255, 0.5);
+  --bsf-card-background: rgba(255, 255, 255, 0.05);
+  --bsf-card-border: 1px solid rgba(255, 255, 255, 0.1);
+  --bsf-card-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+// Element Plus 变量映射
+:root {
+  --el-color-primary: var(--bsf-color-primary);
+  --el-color-success: var(--bsf-color-success);
+  --el-color-warning: var(--bsf-color-warning);
+  --el-color-danger: var(--bsf-color-danger);
+  --el-color-info: var(--bsf-color-info);
+  --el-text-color-primary: var(--bsf-text-color-primary);
+  --el-border-color: var(--bsf-border-color-base);
+  --el-border-radius-base: var(--bsf-radius-base);
+  --el-font-size-base: var(--bsf-font-size-base);
+}
+
+// Sass变量（仅用于组件内部）
+$screen-background: #000000;

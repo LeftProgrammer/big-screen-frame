@@ -1,0 +1,156 @@
+/**
+ * Element Plus 样式集成
+ */
+
+@use '../themes/variables' as *;
+
+// Element Plus 暗色主题变量映射
+[data-theme='dark'] {
+  // 品牌色
+  --el-color-primary: var(--bsf-color-primary);
+  --el-color-primary-light-3: var(--bsf-color-primary-light);
+  --el-color-primary-light-5: var(--bsf-color-primary-lighter);
+  --el-color-primary-dark-2: var(--bsf-color-primary-dark);
+
+  // 功能色
+  --el-color-success: var(--bsf-color-success);
+  --el-color-warning: var(--bsf-color-warning);
+  --el-color-danger: var(--bsf-color-danger);
+  --el-color-info: var(--bsf-color-info);
+
+  // 文字颜色
+  --el-text-color-primary: var(--bsf-text-color-primary);
+  --el-text-color-regular: var(--bsf-text-color-regular);
+  --el-text-color-secondary: var(--bsf-text-color-secondary);
+  --el-text-color-placeholder: var(--bsf-text-color-placeholder);
+  --el-text-color-disabled: var(--bsf-text-color-disabled);
+
+  // 边框颜色
+  --el-border-color: var(--bsf-border-color-base);
+  --el-border-color-light: var(--bsf-border-color-light);
+  --el-border-color-lighter: var(--bsf-border-color-lighter);
+  --el-border-color-extra-light: var(--bsf-border-color-extra-light);
+
+  // 填充色
+  --el-fill-color: var(--bsf-bg-color-base);
+  --el-fill-color-light: var(--bsf-bg-color-light);
+  --el-fill-color-lighter: var(--bsf-bg-color-lighter);
+  --el-fill-color-extra-light: var(--bsf-bg-color-extra-light);
+
+  // 背景色
+  --el-bg-color: var(--bsf-bg-color-base);
+  --el-bg-color-overlay: var(--bsf-bg-color-light);
+
+  // 其他
+  --el-mask-color: var(--bsf-screen-special-mask);
+  --el-box-shadow: var(--bsf-shadow-base);
+  --el-box-shadow-light: var(--bsf-shadow-light);
+  --el-box-shadow-lighter: var(--bsf-shadow-lighter);
+  --el-box-shadow-dark: var(--bsf-shadow-dark);
+}
+
+// Element Plus 亮色主题变量映射
+[data-theme='light'] {
+  // 品牌色
+  --el-color-primary: var(--bsf-color-primary);
+  --el-color-primary-light-3: var(--bsf-color-primary-light);
+  --el-color-primary-light-5: var(--bsf-color-primary-lighter);
+  --el-color-primary-dark-2: var(--bsf-color-primary-dark);
+
+  // 功能色
+  --el-color-success: var(--bsf-color-success);
+  --el-color-warning: var(--bsf-color-warning);
+  --el-color-danger: var(--bsf-color-danger);
+  --el-color-info: var(--bsf-color-info);
+
+  // 文字颜色
+  --el-text-color-primary: var(--bsf-text-color-primary);
+  --el-text-color-regular: var(--bsf-text-color-regular);
+  --el-text-color-secondary: var(--bsf-text-color-secondary);
+  --el-text-color-placeholder: var(--bsf-text-color-placeholder);
+  --el-text-color-disabled: var(--bsf-text-color-disabled);
+
+  // 边框颜色
+  --el-border-color: var(--bsf-border-color-base);
+  --el-border-color-light: var(--bsf-border-color-light);
+  --el-border-color-lighter: var(--bsf-border-color-lighter);
+  --el-border-color-extra-light: var(--bsf-border-color-extra-light);
+
+  // 填充色
+  --el-fill-color: var(--bsf-bg-color-base);
+  --el-fill-color-light: var(--bsf-bg-color-light);
+  --el-fill-color-lighter: var(--bsf-bg-color-lighter);
+  --el-fill-color-extra-light: var(--bsf-bg-color-extra-light);
+
+  // 背景色
+  --el-bg-color: var(--bsf-bg-color-base);
+  --el-bg-color-overlay: var(--bsf-bg-color-light);
+
+  // 其他
+  --el-mask-color: var(--bsf-screen-special-mask);
+  --el-box-shadow: var(--bsf-shadow-base);
+  --el-box-shadow-light: var(--bsf-shadow-light);
+  --el-box-shadow-lighter: var(--bsf-shadow-lighter);
+  --el-box-shadow-dark: var(--bsf-shadow-dark);
+}
+
+// 组件样式覆盖
+.el-button {
+  &--primary {
+    &:hover,
+    &:focus {
+      background: var(--bsf-color-primary-light);
+      border-color: var(--bsf-color-primary-light);
+    }
+
+    &:active {
+      background: var(--bsf-color-primary-dark);
+      border-color: var(--bsf-color-primary-dark);
+    }
+  }
+}
+
+.el-input,
+.el-textarea {
+  --el-input-bg-color: var(--bsf-bg-color-light);
+  --el-input-border-color: var(--bsf-border-color-base);
+  --el-input-hover-border-color: var(--bsf-border-color-light);
+  --el-input-focus-border-color: var(--bsf-color-primary);
+}
+
+.el-select-dropdown {
+  background: var(--bsf-bg-color-base);
+  border: 1px solid var(--bsf-border-color-base);
+
+  .el-select-dropdown__item {
+    &.hover,
+    &:hover {
+      background: var(--bsf-bg-color-light);
+    }
+
+    &.selected {
+      background: var(--bsf-bg-color-lighter);
+      color: var(--bsf-color-primary);
+    }
+  }
+}
+
+.el-dialog {
+  background: var(--bsf-bg-color-base);
+  border: 1px solid var(--bsf-border-color-base);
+  box-shadow: var(--bsf-shadow-dark);
+
+  .el-dialog__header {
+    border-bottom: 1px solid var(--bsf-border-color-base);
+  }
+
+  .el-dialog__footer {
+    border-top: 1px solid var(--bsf-border-color-base);
+  }
+}
+
+.el-message {
+  background: var(--bsf-bg-color-base);
+  border: 1px solid var(--bsf-border-color-base);
+  box-shadow: var(--bsf-shadow-base);
+}

@@ -1,6 +1,4 @@
-import VScreenBox from './scale-screen.vue'
-export * from './types'
+import ScaleScreen from './scale-screen.vue';
+export * from './types';
 
-export {
-  VScreenBox
-}
+export { ScaleScreen };

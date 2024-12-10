@@ -1,50 +1,69 @@
 {
   "compilerOptions": {
+    /* 语言和环境 */
     "target": "ES2020",
-    "useDefineForClassFields": true,
-    "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "skipLibCheck": true,
+    "jsx": "preserve",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": true,
 
-    /* Bundler mode */
+    /* 模块 */
+    "module": "ESNext",
     "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@styles/*": ["src/styles/*"]
+    },
+    "types": ["node", "vue", "vite/client"],
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": false,
-    "jsx": "preserve",
 
-    /* Type Checking */
+    /* JavaScript 支持 */
+    "allowJs": true,
+    "checkJs": false,
+
+    /* 类型检查 */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
 
-    /* Paths */
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },
-
-    /* Declaration */
+    /* 构建和输出 */
     "declaration": true,
     "declarationDir": "./types",
-    "emitDeclarationOnly": true,
-    
-    /* Vue Support */
-    "types": ["vue"]
+    "outDir": "./types",
+    "sourceMap": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+
+    /* 其他 */
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "vite.config.ts"
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "types",
     "**/*.test.ts",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "**/*.stories.ts"
+  ],
+  "references": [
+    { "path": "./tsconfig.node.json" }
   ]
 }

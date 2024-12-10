@@ -1,0 +1,146 @@
+/**
+ * 主题构建器
+ * 用于构建和生成主题相关的 CSS 变量
+ */
+
+@use 'sass:map';
+@use 'sass:meta';
+@use './variables' as *;
+
+// 检查主题变量是否有效
+@function is-valid-theme($theme-name) {
+  @if not map.has-key($theme-tokens, $theme-name) {
+    @error 'Theme "#{$theme-name}" not found in $theme-tokens!';
+    @return false;
+  }
+  @return true;
+}
+
+// 生成颜色变量
+@mixin generate-color-vars($colors, $prefix: '') {
+  @if not $colors {
+    @warn 'No colors provided to generate-color-vars';
+    @content;
+  } @else {
+    @each $type, $variants in $colors {
+      @if type-of($variants) == 'map' {
+        @if $type == 'brand' {
+          @each $color-key, $color-map in $variants {
+            @each $shade, $value in $color-map {
+              @if $shade == 'base' {
+                --bsf-color-#{$color-key}: #{$value};
+              } @else {
+                --bsf-color-#{$color-key}-#{$shade}: #{$value};
+              }
+            }
+          }
+        } @else {
+          @each $key, $value in $variants {
+            --bsf-#{$type}-color-#{$key}: #{$value};
+          }
+        }
+      }
+    }
+  }
+}
+
+// 生成效果变量
+@mixin generate-effect-vars($effects) {
+  @if not $effects {
+    @warn 'No effects provided to generate-effect-vars';
+    @content;
+  } @else {
+    @each $type, $variants in $effects {
+      @each $key, $value in $variants {
+        --bsf-#{$type}-#{$key}: #{$value};
+      }
+    }
+  }
+}
+
+// 生成大屏特有变量
+@mixin generate-screen-vars($screen) {
+  @if not $screen {
+    @warn 'No screen config provided to generate-screen-vars';
+    @content;
+  } @else {
+    @each $type, $variants in $screen {
+      @each $key, $value in $variants {
+        --bsf-screen-#{$type}-#{$key}: #{$value};
+      }
+    }
+  }
+}
+
+// 生成尺寸变量
+@mixin generate-sizing-vars($sizing) {
+  @if not $sizing {
+    @warn 'No sizing config provided to generate-sizing-vars';
+    @content;
+  } @else {
+    @each $type, $variants in $sizing {
+      @each $key, $value in $variants {
+        --bsf-#{$type}-#{$key}: #{$value};
+      }
+    }
+  }
+}
+
+// 生成组件变量
+@mixin generate-component-vars($components) {
+  @if not $components {
+    @content;
+  } @else {
+    @each $component, $variants in $components {
+      @each $key, $value in $variants {
+        --bsf-#{$component}-#{$key}: #{$value};
+      }
+    }
+  }
+}
+
+// 生成布局变量
+@mixin generate-layout-vars($layout) {
+  @if not $layout {
+    @content;
+  } @else {
+    @each $section, $variants in $layout {
+      @each $key, $value in $variants {
+        --bsf-layout-#{$section}-#{$key}: #{$value};
+      }
+    }
+  }
+}
+
+// 生成主题
+@mixin generate-theme($theme-name) {
+  $is-valid: is-valid-theme($theme-name);
+
+  @if $is-valid {
+    $theme: map.get($theme-tokens, $theme-name);
+
+    [data-theme='#{$theme-name}'] {
+      // 生成颜色变量
+      @include generate-color-vars(map.get($theme, 'colors'));
+
+      // 生成效果变量
+      @include generate-effect-vars(map.get($theme, 'effects'));
+
+      // 生成大屏特有变量
+      @include generate-screen-vars(map.get($theme, 'screen'));
+
+      // 生成组件变量
+      @include generate-component-vars(map.get($theme, 'components'));
+
+      // 生成布局变量
+      @include generate-layout-vars(map.get($theme, 'layout'));
+    }
+  }
+}
+
+// 生成共享变量（只需要生成一次）
+@mixin generate-shared-vars() {
+  :root {
+    @include generate-sizing-vars($sizing);
+  }
+}

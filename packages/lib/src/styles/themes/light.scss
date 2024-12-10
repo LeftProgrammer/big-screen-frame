@@ -1,7 +1,7 @@
 @use 'variables' as *;
 
-// 暗色主题变量
-[data-theme='dark'] {
+// 亮色主题变量
+[data-theme='light'] {
   // 品牌色
   @each $color-key, $color-map in $theme-colors {
     --bsf-color-#{$color-key}: #{map-get($color-map, 'base')};
@@ -12,27 +12,27 @@
   }
 
   // 文字颜色
-  @each $text-key, $value in map-get($text-colors, 'dark') {
+  @each $text-key, $value in map-get($text-colors, 'light') {
     --bsf-text-color-#{$text-key}: #{$value};
   }
 
   // 边框颜色
-  @each $border-key, $value in map-get($border-colors, 'dark') {
+  @each $border-key, $value in map-get($border-colors, 'light') {
     --bsf-border-color-#{$border-key}: #{$value};
   }
 
   // 背景颜色
-  @each $bg-key, $value in map-get($bg-colors, 'dark') {
+  @each $bg-key, $value in map-get($bg-colors, 'light') {
     --bsf-bg-color-#{$bg-key}: #{$value};
   }
 
   // 阴影
-  @each $shadow-key, $value in map-get($shadows, 'dark') {
+  @each $shadow-key, $value in map-get($shadows, 'light') {
     --bsf-shadow-#{$shadow-key}: #{$value};
   }
 
   // 大屏特有变量
-  @each $screen-key, $value in map-get($screen-vars, 'dark') {
+  @each $screen-key, $value in map-get($screen-vars, 'light') {
     --bsf-#{$screen-key}: #{$value};
   }
 

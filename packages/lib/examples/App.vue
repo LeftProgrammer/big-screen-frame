@@ -1,62 +1,130 @@
 <template>
   <div class="app">
-    <VScreenBox :width="1920" :height="1080">
-      <div class="content">
-        <h1>Scale Screen Example</h1>
-        <div class="demo-box">
-          <div class="item" v-for="i in 4" :key="i">
-            Box {{ i }}
-          </div>
-        </div>
+    <el-menu
+      class="nav"
+      :default-active="activeMenu"
+      :router="true"
+      :default-openeds="['core', 'components', 'demos']"
+    >
+      <div class="nav-header">
+        <h1>Big Screen Frame</h1>
+        <p>Examples & Documentation</p>
       </div>
-    </VScreenBox>
+
+      <!-- 核心功能 -->
+      <el-sub-menu index="core">
+        <template #title>
+          <el-icon><Monitor /></el-icon>
+          <span>Core Features</span>
+        </template>
+
+        <el-menu-item-group title="Layout">
+          <el-menu-item index="/core/layout/scale-screen/basic"> Scale Screen </el-menu-item>
+        </el-menu-item-group>
+
+        <el-menu-item-group title="Theme">
+          <el-menu-item index="/core/theme">Theme System</el-menu-item>
+        </el-menu-item-group>
+      </el-sub-menu>
+
+      <!-- 组件 -->
+      <el-sub-menu index="components">
+        <template #title>
+          <el-icon><Grid /></el-icon>
+          <span>Components</span>
+        </template>
+
+        <el-menu-item-group title="Basic">
+          <el-menu-item index="/components/button" disabled>Button</el-menu-item>
+          <el-menu-item index="/components/card" disabled>Card</el-menu-item>
+        </el-menu-item-group>
+
+        <el-menu-item-group title="Data">
+          <el-menu-item index="/components/table" disabled>Table</el-menu-item>
+          <el-menu-item index="/components/chart" disabled>Chart</el-menu-item>
+        </el-menu-item-group>
+      </el-sub-menu>
+
+      <!-- 完整示例 -->
+      <el-sub-menu index="demos">
+        <template #title>
+          <el-icon><Operation /></el-icon>
+          <span>Complete Demos</span>
+        </template>
+
+        <el-menu-item index="/demos/dashboard" disabled>Dashboard</el-menu-item>
+        <el-menu-item index="/demos/data-analysis" disabled> Data Analysis </el-menu-item>
+        <el-menu-item index="/demos/monitoring" disabled> Monitoring Center </el-menu-item>
+      </el-sub-menu>
+    </el-menu>
+
+    <main class="main">
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </main>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { VScreenBox } from '../src/core/layout'
+import { ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
+import * as ElementPlusIconsVue from '@element-plus/icons-vue';
+
+const route = useRoute();
+const activeMenu = computed(() => route.path);
+const { Monitor, Grid, Operation } = ElementPlusIconsVue;
 </script>
 
 <style lang="scss" scoped>
-@use '@/styles/base/variables' as *;
-
 .app {
+  display: flex;
   width: 100vw;
   height: 100vh;
-  background-color: $background-color-base;
+  background: var(--bsf-bg-color-base);
 
-  .content {
-    width: 100%;
+  .nav {
+    width: 260px;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    color: $text-primary;
-    font-size: $font-size-large;
+    border-right: 1px solid var(--bsf-border-color);
+    background: var(--bsf-bg-color-light);
 
-    h1 {
-      margin-bottom: 40px;
-    }
+    .nav-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--bsf-border-color);
 
-    .demo-box {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      width: 100%;
-      max-width: 1200px;
+      h1 {
+        font-size: 20px;
+        margin: 0 0 8px;
+        color: var(--bsf-text-color-primary);
+      }
 
-      .item {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 8px;
-        height: 300px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
+      p {
+        font-size: 14px;
+        margin: 0;
+        color: var(--bsf-text-color-secondary);
       }
     }
   }
+
+  .main {
+    flex: 1;
+    height: 100%;
+    overflow: auto;
+    background: var(--bsf-bg-color-base);
+  }
+}
+
+// 路由过渡动画
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

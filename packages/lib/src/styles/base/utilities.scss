@@ -1,0 +1,440 @@
+/**
+ * 工具类 - 大屏项目常用样式库
+ */
+
+// SCSS Variables
+$transition-duration: 0.3s;
+$transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+$hover-scale: 1.05;
+$hover-brightness: 1.2;
+$backdrop-blur: 8px;
+$border-width: 1px;
+$corner-size: 10px;
+$scrollbar-size: 6px;
+$scrollbar-radius: 3px;
+$glass-opacity: 0.1;
+$mask-z-index: 1000;
+
+// Animation Variables
+$animation-duration: 1s;
+$pulse-duration: 2s;
+$bounce-height: 25%;
+
+// Breakpoints
+$breakpoints: (
+  'sm': 576px,
+  'md': 768px,
+  'lg': 992px,
+  'xl': 1200px,
+  'xxl': 1400px
+);
+
+// Namespace
+$namespace: 'bsf';
+
+// Utility classes with namespace
+.#{$namespace} {
+  // Display & Layout
+  &-d {
+    &-none {
+      display: none;
+    }
+    &-block {
+      display: block;
+    }
+    &-flex {
+      display: flex;
+    }
+    &-grid {
+      display: grid;
+    }
+    &-inline-flex {
+      display: inline-flex;
+    }
+  }
+
+  // Flex 布局
+  &-flex {
+    &-row {
+      flex-direction: row;
+    }
+    &-column {
+      flex-direction: column;
+    }
+    &-wrap {
+      flex-wrap: wrap;
+    }
+    &-grow-1 {
+      flex-grow: 1;
+    }
+    &-shrink-0 {
+      flex-shrink: 0;
+    }
+  }
+
+  // 对齐方式
+  &-justify {
+    &-start {
+      justify-content: flex-start;
+    }
+    &-end {
+      justify-content: flex-end;
+    }
+    &-center {
+      justify-content: center;
+    }
+    &-between {
+      justify-content: space-between;
+    }
+    &-around {
+      justify-content: space-around;
+    }
+  }
+
+  &-items {
+    &-start {
+      align-items: flex-start;
+    }
+    &-end {
+      align-items: flex-end;
+    }
+    &-center {
+      align-items: center;
+    }
+    &-stretch {
+      align-items: stretch;
+    }
+  }
+
+  // Position
+  &-position {
+    &-relative {
+      position: relative;
+    }
+    &-absolute {
+      position: absolute;
+    }
+    &-fixed {
+      position: fixed;
+    }
+  }
+
+  // 文本样式
+  &-text {
+    &-left {
+      text-align: left;
+    }
+    &-center {
+      text-align: center;
+    }
+    &-right {
+      text-align: right;
+    }
+    &-nowrap {
+      white-space: nowrap;
+    }
+    &-truncate {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    // 文本颜色
+    &-primary {
+      color: var(--bsf-text-color-primary);
+    }
+    &-regular {
+      color: var(--bsf-text-color-regular);
+    }
+    &-secondary {
+      color: var(--bsf-text-color-secondary);
+    }
+    // 字体大小
+    &-sm {
+      font-size: var(--bsf-font-size-sm);
+    }
+    &-base {
+      font-size: var(--bsf-font-size-base);
+    }
+    &-lg {
+      font-size: var(--bsf-font-size-lg);
+    }
+  }
+
+  // 间距 - 使用 mixin 来减少代码重复
+  @mixin spacing-utilities($type, $abbr) {
+    @each $size,
+      $value
+        in ('sm': var(--bsf-spacing-sm), 'md': var(--bsf-spacing-md), 'lg': var(--bsf-spacing-lg))
+    {
+      &-#{$abbr}-#{$size} {
+        #{$type}: $value;
+      }
+      &-#{$abbr}t-#{$size} {
+        #{$type}-top: $value;
+      }
+      &-#{$abbr}b-#{$size} {
+        #{$type}-bottom: $value;
+      }
+      &-#{$abbr}r-#{$size} {
+        #{$type}-right: $value;
+      }
+      &-#{$abbr}l-#{$size} {
+        #{$type}-left: $value;
+      }
+      &-#{$abbr}x-#{$size} {
+        #{$type}-left: $value;
+        #{$type}-right: $value;
+      }
+      &-#{$abbr}y-#{$size} {
+        #{$type}-top: $value;
+        #{$type}-bottom: $value;
+      }
+    }
+  }
+
+  @include spacing-utilities('margin', 'm');
+  @include spacing-utilities('padding', 'p');
+}
+
+// 主题切换过渡
+.#{$namespace}-theme {
+  &-transition {
+    transition:
+      background-color 0.3s ease-in-out,
+      border-color 0.3s ease-in-out,
+      color 0.3s ease-in-out,
+      fill 0.3s ease-in-out,
+      box-shadow 0.3s ease-in-out;
+  }
+
+  &-transition-disable {
+    transition: none !important;
+  }
+}
+
+// 大屏特有样式 - 这些样式不需要 !important
+.#{$namespace}-border-decoration {
+  position: relative;
+  border: $border-width solid var(--bsf-border-decoration-color);
+  box-shadow: var(--bsf-border-decoration-glow);
+  transition: all $transition-duration $transition-timing;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: $corner-size;
+    height: $corner-size;
+    border: $border-width solid var(--bsf-border-decoration-color);
+  }
+
+  &::before {
+    top: -$border-width;
+    left: -$border-width;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  &::after {
+    bottom: -$border-width;
+    right: -$border-width;
+    border-left: none;
+    border-top: none;
+  }
+}
+
+// 卡片样式
+.#{$namespace}-card {
+  background: var(--bsf-card-background);
+  border: var(--bsf-card-border);
+  box-shadow: var(--bsf-card-shadow);
+  border-radius: var(--bsf-radius-base);
+  padding: var(--bsf-spacing-base);
+  transition: all $transition-duration $transition-timing;
+
+  &:hover {
+    box-shadow: var(--bsf-border-decoration-glow);
+  }
+
+  // 卡片变体
+  &-glass {
+    @extend .#{$namespace}-card;
+    background: rgba(255, 255, 255, $glass-opacity);
+    backdrop-filter: blur($backdrop-blur);
+    -webkit-backdrop-filter: blur($backdrop-blur);
+  }
+
+  &-dark {
+    @extend .#{$namespace}-card;
+    background: rgba(0, 0, 0, 0.6);
+  }
+}
+
+// 背景效果
+.#{$namespace}-bg {
+  &-gradient-dark {
+    background: linear-gradient(
+      180deg,
+      var(--bsf-bg-color-base) 0%,
+      var(--bsf-bg-color-light) 100%
+    );
+  }
+
+  &-gradient-primary {
+    background: linear-gradient(45deg, var(--bsf-color-primary) 0%, var(--bsf-color-info) 100%);
+  }
+}
+
+// 毛玻璃效果
+.#{$namespace}-backdrop-blur {
+  backdrop-filter: blur($backdrop-blur);
+  -webkit-backdrop-filter: blur($backdrop-blur);
+  background: var(--bsf-mask-color);
+}
+
+// 动画效果
+.#{$namespace}-hover {
+  &-scale {
+    transition: transform $transition-duration $transition-timing;
+    &:hover {
+      transform: scale($hover-scale);
+    }
+  }
+
+  &-brightness {
+    transition: filter $transition-duration $transition-timing;
+    &:hover {
+      filter: brightness($hover-brightness);
+    }
+  }
+
+  &-glow {
+    transition: box-shadow $transition-duration $transition-timing;
+    &:hover {
+      box-shadow: var(--bsf-border-decoration-glow);
+    }
+  }
+}
+
+// 文字渐变
+.#{$namespace}-text-gradient {
+  background: linear-gradient(90deg, var(--bsf-color-primary) 0%, var(--bsf-color-info) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// 滚动条样式
+.#{$namespace}-scrollbar {
+  &::-webkit-scrollbar {
+    width: $scrollbar-size;
+    height: $scrollbar-size;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--bsf-border-color-base);
+    border-radius: $scrollbar-radius;
+
+    &:hover {
+      background: var(--bsf-border-color-light);
+    }
+  }
+}
+
+// 遮罩层
+.#{$namespace}-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bsf-mask-color);
+  z-index: $mask-z-index;
+}
+
+// 溢出处理
+.#{$namespace}-overflow {
+  &-hidden {
+    overflow: hidden;
+  }
+  &-auto {
+    overflow: auto;
+  }
+  &-y-auto {
+    overflow-y: auto;
+  }
+  &-x-auto {
+    overflow-x: auto;
+  }
+}
+
+// 动画类
+.#{$namespace}-animate {
+  &-spin {
+    animation: #{$namespace}-spin $animation-duration linear infinite;
+  }
+
+  &-pulse {
+    animation: #{$namespace}-pulse $pulse-duration $transition-timing infinite;
+  }
+
+  &-bounce {
+    animation: #{$namespace}-bounce $animation-duration infinite;
+  }
+}
+
+// 动画关键帧
+@keyframes #{$namespace}-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes #{$namespace}-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes #{$namespace}-bounce {
+  0%,
+  100% {
+    transform: translateY(-$bounce-height);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+// 响应式工具类
+@each $breakpoint, $width in $breakpoints {
+  @media (min-width: $width) {
+    .#{$namespace}-d-#{$breakpoint} {
+      &-none {
+        display: none;
+      }
+      &-block {
+        display: block;
+      }
+      &-flex {
+        display: flex;
+      }
+      &-grid {
+        display: grid;
+      }
+    }
+  }
+}

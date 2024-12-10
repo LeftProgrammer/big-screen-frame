@@ -1,0 +1,242 @@
+/**
+ * 主题令牌定义
+ * 集中管理所有主题相关的变量
+ */
+
+// 基础颜色
+$base-colors: (
+  'primary': (
+    'base': #409eff,
+    'light': #79bbff,
+    'lighter': #a6d2ff,
+    'dark': #337ecc,
+    'darker': #266199
+  ),
+  'success': (
+    'base': #67c23a,
+    'light': #95d475,
+    'lighter': #b3e19d,
+    'dark': #529b2e,
+    'darker': #3e7423
+  ),
+  'warning': (
+    'base': #e6a23c,
+    'light': #eebe77,
+    'lighter': #f3d19e,
+    'dark': #b88230,
+    'darker': #8a6224
+  ),
+  'danger': (
+    'base': #f56c6c,
+    'light': #f89898,
+    'lighter': #fab6b6,
+    'dark': #c45656,
+    'darker': #934141
+  ),
+  'info': (
+    'base': #909399,
+    'light': #b1b3b8,
+    'lighter': #c8c9cc,
+    'dark': #73767a,
+    'darker': #56585c
+  )
+);
+
+// 共享变量
+$sizing: (
+  'font': (
+    'xs': 12px,
+    'sm': 13px,
+    'base': 14px,
+    'md': 16px,
+    'lg': 18px,
+    'xl': 20px
+  ),
+  'spacing': (
+    'xs': 4px,
+    'sm': 8px,
+    'base': 12px,
+    'md': 16px,
+    'lg': 24px,
+    'xl': 32px
+  ),
+  'radius': (
+    'xs': 2px,
+    'sm': 3px,
+    'base': 4px,
+    'md': 6px,
+    'lg': 8px,
+    'xl': 12px,
+    'full': 9999px
+  )
+);
+
+// 主题令牌
+$theme-tokens: (
+  'dark': (
+    'colors': (
+      'brand': $base-colors,
+      'text': (
+        'primary': #ffffff,
+        'regular': rgba(255, 255, 255, 0.85),
+        'secondary': rgba(255, 255, 255, 0.65),
+        'placeholder': rgba(255, 255, 255, 0.45),
+        'disabled': rgba(255, 255, 255, 0.25)
+      ),
+      'border': (
+        'base': rgba(255, 255, 255, 0.2),
+        'light': rgba(255, 255, 255, 0.15),
+        'lighter': rgba(255, 255, 255, 0.1),
+        'extra-light': rgba(255, 255, 255, 0.05)
+      ),
+      'background': (
+        'base': #000000,
+        'light': rgba(255, 255, 255, 0.04),
+        'lighter': rgba(255, 255, 255, 0.08),
+        'extra-light': rgba(255, 255, 255, 0.12)
+      )
+    ),
+    'effects': (
+      'shadow': (
+        'base': '0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04)',
+        'light': '0 2px 12px 0 rgba(0, 0, 0, 0.1)',
+        'lighter': '0 2px 16px 0 rgba(0, 0, 0, 0.08)',
+        'dark': '0 2px 4px rgba(0, 0, 0, 0.25), 0 0 6px rgba(0, 0, 0, 0.15)'
+      ),
+      'transition': (
+        'base': 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        'fast': 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        'slow': 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+      )
+    ),
+    'screen': (
+      'decoration': (
+        'border-color': rgba(64, 158, 255, 0.5),
+        'glow': '0 0 10px rgba(64, 158, 255, 0.5)',
+        'gradient': 'linear-gradient(45deg, rgba(64, 158, 255, 0.5), rgba(64, 158, 255, 0.2))'
+      ),
+      'special': (
+        'mask': rgba(0, 0, 0, 0.5),
+        'glass': rgba(255, 255, 255, 0.05),
+        'card': rgba(255, 255, 255, 0.05),
+        'backdrop': 'blur(8px)'
+      )
+    ),
+    'components': (
+      'card': (
+        'background': rgba(255, 255, 255, 0.05),
+        'border': rgba(255, 255, 255, 0.1),
+        'shadow': '0 2px 12px 0 rgba(0, 0, 0, 0.1)'
+      ),
+      'button': (
+        'background': rgba(255, 255, 255, 0.1),
+        'hover': rgba(255, 255, 255, 0.2),
+        'active': rgba(255, 255, 255, 0.3)
+      ),
+      'input': (
+        'background': rgba(255, 255, 255, 0.05),
+        'border': rgba(255, 255, 255, 0.1),
+        'hover-border': rgba(255, 255, 255, 0.2)
+      )
+    ),
+    'layout': (
+      'header': (
+        'height': 60px,
+        'background': rgba(0, 0, 0, 0.8),
+        'border': rgba(255, 255, 255, 0.1)
+      ),
+      'sidebar': (
+        'width': 240px,
+        'background': rgba(0, 0, 0, 0.8),
+        'border': rgba(255, 255, 255, 0.1)
+      ),
+      'content': (
+        'padding': 24px,
+        'background': transparent
+      )
+    )
+  ),
+  'light': (
+    'colors': (
+      'brand': $base-colors,
+      'text': (
+        'primary': #303133,
+        'regular': #606266,
+        'secondary': #909399,
+        'placeholder': #c0c4cc,
+        'disabled': #c8c9cc
+      ),
+      'border': (
+        'base': #dcdfe6,
+        'light': #e4e7ed,
+        'lighter': #ebeef5,
+        'extra-light': #f2f6fc
+      ),
+      'background': (
+        'base': #ffffff,
+        'light': #f5f7fa,
+        'lighter': #fafafa,
+        'extra-light': #fafbfc
+      )
+    ),
+    'effects': (
+      'shadow': (
+        'base': '0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04)',
+        'light': '0 2px 12px 0 rgba(0, 0, 0, 0.1)',
+        'lighter': '0 2px 16px 0 rgba(0, 0, 0, 0.08)',
+        'dark': '0 2px 4px rgba(0, 0, 0, 0.25), 0 0 6px rgba(0, 0, 0, 0.15)'
+      ),
+      'transition': (
+        'base': 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        'fast': 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        'slow': 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+      )
+    ),
+    'screen': (
+      'decoration': (
+        'border-color': rgba(64, 158, 255, 0.3),
+        'glow': '0 0 10px rgba(64, 158, 255, 0.3)',
+        'gradient': 'linear-gradient(45deg, rgba(64, 158, 255, 0.3), rgba(64, 158, 255, 0.1))'
+      ),
+      'special': (
+        'mask': rgba(0, 0, 0, 0.3),
+        'glass': rgba(255, 255, 255, 0.8),
+        'card': rgba(255, 255, 255, 0.9),
+        'backdrop': 'blur(8px)'
+      )
+    ),
+    'components': (
+      'card': (
+        'background': rgba(255, 255, 255, 0.9),
+        'border': rgba(255, 255, 255, 0.1),
+        'shadow': '0 2px 12px 0 rgba(0, 0, 0, 0.1)'
+      ),
+      'button': (
+        'background': rgba(255, 255, 255, 0.1),
+        'hover': rgba(255, 255, 255, 0.2),
+        'active': rgba(255, 255, 255, 0.3)
+      ),
+      'input': (
+        'background': rgba(255, 255, 255, 0.05),
+        'border': rgba(255, 255, 255, 0.1),
+        'hover-border': rgba(255, 255, 255, 0.2)
+      )
+    ),
+    'layout': (
+      'header': (
+        'height': 60px,
+        'background': #ffffff,
+        'border': rgba(0, 0, 0, 0.1)
+      ),
+      'sidebar': (
+        'width': 240px,
+        'background': #ffffff,
+        'border': rgba(0, 0, 0, 0.1)
+      ),
+      'content': (
+        'padding': 24px,
+        'background': transparent
+      )
+    )
+  )
+);
