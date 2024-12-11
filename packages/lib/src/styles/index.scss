@@ -5,17 +5,14 @@
 // 1. normalize.css - 确保跨浏览器的一致性
 @import './base/normalize';
 
-// 2. 变量定义 - 必须在其他样式之前
-@import './base/variables';
-
 // 3. 混入函数
 @import './base/mixins';
 
 // 4. 工具类
 @import './base/utilities';
 
-// 5. Element Plus 集成（可选）
-@import './vendors/element-plus';
+// 5. 过渡动画
+@import './transitions';
 
 // 6. 主题样式
 @import './themes/index';

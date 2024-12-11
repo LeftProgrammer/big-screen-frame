@@ -163,8 +163,8 @@ $theme-tokens: (
         'primary': #303133,
         'regular': #606266,
         'secondary': #909399,
-        'placeholder': #c0c4cc,
-        'disabled': #c8c9cc
+        'placeholder': #a8abb2,
+        'disabled': #c0c4cc
       ),
       'border': (
         'base': #dcdfe6,
@@ -174,9 +174,11 @@ $theme-tokens: (
       ),
       'background': (
         'base': #ffffff,
+        'page': #f5f7fa,
+        'overlay': #ffffff,
         'light': #f5f7fa,
         'lighter': #fafafa,
-        'extra-light': #fafbfc
+        'extra-light': #ffffff
       )
     ),
     'effects': (

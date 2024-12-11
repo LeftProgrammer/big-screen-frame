@@ -2,6 +2,7 @@
  * CSS变量定义 - 默认变量，可被主题覆盖
  */
 
+// 暗色模式（默认）
 :root {
   // 品牌色
   --bsf-color-primary: #409eff;
@@ -22,6 +23,7 @@
 
   // 背景颜色
   --bsf-bg-color-base: #000000;
+  --bsf-bg-color-page: #000000;
   --bsf-bg-color-light: rgba(255, 255, 255, 0.04);
   --bsf-bg-color-lighter: rgba(255, 255, 255, 0.08);
   --bsf-mask-color: rgba(0, 0, 0, 0.5);
@@ -49,7 +51,33 @@
   --bsf-border-decoration-glow: 0 0 10px rgba(64, 158, 255, 0.5);
   --bsf-card-background: rgba(255, 255, 255, 0.05);
   --bsf-card-border: 1px solid rgba(255, 255, 255, 0.1);
-  --bsf-card-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+// 亮色模式
+html[data-theme='light'] {
+  // 文字颜色
+  --bsf-text-color-primary: #303133;
+  --bsf-text-color-regular: #606266;
+  --bsf-text-color-secondary: #909399;
+  --bsf-text-color-placeholder: #c0c4cc;
+
+  // 边框颜色
+  --bsf-border-color-base: #dcdfe6;
+  --bsf-border-color-light: #e4e7ed;
+
+  // 背景颜色
+  --bsf-bg-color-base: #ffffff;
+  --bsf-bg-color-page: #f5f7fa;
+  --bsf-bg-color-light: #f5f7fa;
+  --bsf-bg-color-lighter: #fafafa;
+  --bsf-mask-color: rgba(255, 255, 255, 0.5);
+  --bsf-screen-background: #ffffff;
+
+  // 大屏特有
+  --bsf-border-decoration-color: rgba(64, 158, 255, 0.3);
+  --bsf-border-decoration-glow: 0 0 10px rgba(64, 158, 255, 0.3);
+  --bsf-card-background: #ffffff;
+  --bsf-card-border: 1px solid #e4e7ed;
 }
 
 // Element Plus 变量映射

@@ -1,148 +1,60 @@
 // 主题类型定义
 export type ThemeType = 'dark' | 'light' | string;
 
-// 颜色变量定义
-export interface ThemeColors {
-  // 品牌色
-  primaryColor: string;
-  successColor: string;
-  warningColor: string;
-  dangerColor: string;
-  infoColor: string;
+// 主题变量类型定义
+export interface ThemeVars {
+  // 颜色系统
+  'color-primary': string;
+  'color-success': string;
+  'color-warning': string;
+  'color-danger': string;
+  'color-info': string;
 
-  // 文字颜色
-  textPrimary: string;
-  textRegular: string;
-  textSecondary: string;
-  textPlaceholder: string;
+  // 文本颜色
+  'text-color-primary': string;
+  'text-color-regular': string;
+  'text-color-secondary': string;
+  'text-color-placeholder': string;
 
   // 边框颜色
-  borderColorBase: string;
-  borderColorLight: string;
-  borderColorLighter: string;
-  borderColorExtraLight: string;
+  'border-color-base': string;
+  'border-color-light': string;
+  'border-color-lighter': string;
+  'border-color-extra-light': string;
 
   // 背景颜色
-  bgColor: string;
-  bgColorLight: string;
-  bgColorLighter: string;
-  bgColorExtraLight: string;
-}
+  'bg-color-base': string;
+  'bg-color-overlay': string;
+  'bg-color-page': string;
+  'bg-color-screen': string;
 
-// 主题相关的类型定义
-export interface ThemeColorVars {
-  primary: string;
-  success: string;
-  warning: string;
-  danger: string;
-  info: string;
-  text: {
-    primary: string;
-    regular: string;
-    secondary: string;
-    placeholder: string;
-  };
-  border: {
-    base: string;
-    light: string;
-    lighter: string;
-    extra_light: string;
-  };
-  background: {
-    base: string;
-    light: string;
-    lighter: string;
-  };
-  chart: string[];
-}
-
-export interface ThemeSizeVars {
-  font: {
-    xs: string;
-    sm: string;
-    base: string;
-    md: string;
-    lg: string;
-    xl: string;
-  };
-  spacing: {
-    xs: string;
-    sm: string;
-    base: string;
-    md: string;
-    lg: string;
-    xl: string;
-  };
-  radius: {
-    sm: string;
-    base: string;
-    lg: string;
-    round: string;
-    circle: string;
-  };
-}
-
-export interface ThemeEffectVars {
-  shadow: {
-    base: string;
-    light: string;
-    dark: string;
-  };
-  border: {
-    decoration: {
-      color: string;
-      glow: string;
-    };
-  };
-  transition: {
-    fast: string;
-    base: string;
-    slow: string;
-  };
-}
-
-export interface BSFThemeVars {
-  colors: ThemeColorVars;
-  sizes: ThemeSizeVars;
-  effects: ThemeEffectVars;
-}
-
-// Element Plus 主题变量（可选）
-export interface EPThemeVars {
-  colors: {
-    primary: string;
-    success: string;
-    warning: string;
-    danger: string;
-    info: string;
-    // ... 其他 Element Plus 颜色变量
-  };
-  // ... 其他 Element Plus 变量
-}
-
-export interface ThemeVars {
-  bsf: BSFThemeVars;
-  ep?: EPThemeVars;
+  // 阴影
+  'shadow-base': string;
+  'shadow-light': string;
+  'shadow-lighter': string;
 }
 
 // 主题配置选项
 export interface ThemeOptions {
   type: ThemeType;
-  colors?: Partial<ThemeColors>;
   cssVars?: Record<string, string>;
   enableTransition?: boolean;
+  transitionDuration?: number; // 过渡动画持续时间（毫秒）
   enableElementPlus?: boolean;
 }
 
 // 主题上下文
 export interface ThemeContext {
   currentTheme: ThemeType;
-  colors: ThemeColors;
   cssVars: Record<string, string>;
+  enableTransition: boolean;
+  transitionDuration: number;
   // 切换主题
   changeTheme: (theme: ThemeType) => void;
   // 更新主题配置
   updateTheme: (options: Partial<ThemeOptions>) => void;
   // 获取CSS变量值
   getCssVar: (key: string) => string;
+  // 设置过渡动画
+  setTransition: (enable: boolean, duration?: number) => void;
 }
