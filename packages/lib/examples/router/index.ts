@@ -1,66 +1,60 @@
+// src/router/index.ts
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
-// 核心功能示例路由
-const coreRoutes: RouteRecordRaw[] = [
+const routes: RouteRecordRaw[] = [
+  {
+    path: '/',
+    redirect: '/core/theme' // 默认跳转到首页功能模块
+  },
+  {
+    path: '/screen',
+    name: 'Screen',
+    component: () => import('../views/screen/index.vue'),
+    meta: { title: '完整大屏示例', icon: 'el-icon-monitor' }
+  },
   {
     path: '/core',
     name: 'Core',
-    redirect: '/core/layout/scale-screen/basic',
+    meta: { title: '核心功能', icon: 'el-icon-setting' },
     children: [
       {
-        path: 'layout/scale-screen/basic',
-        name: 'ScaleScreenBasic',
-        component: () => import('../core/layout/scale-screen/basic.vue'),
-        meta: {
-          title: 'Scale Screen Basic',
-          group: 'Layout'
-        }
+        path: 'theme',
+        name: 'CoreTheme',
+        component: () => import('../views/core/theme/index.vue'),
+        meta: { title: '主题系统', icon: 'el-icon-magic-stick' }
       },
       {
-        path: 'theme',
-        name: 'Theme',
-        component: () => import('../views/theme/index.vue'),
-        meta: {
-          title: 'Theme',
-          group: 'Core'
-        }
+        path: 'layout',
+        name: 'CoreLayout',
+        component: () => import('../views/core/layout/index.vue'),
+        meta: { title: '布局系统', icon: 'el-icon-grid' }
       }
+    ]
+  },
+  {
+    path: '/components',
+    name: 'Components',
+    meta: { title: '组件示例', icon: 'el-icon-menu' },
+    children: [
+      // {
+      //   path: 'charts',
+      //   name: 'ComponentsCharts',
+      //   component: () => import('../views/components/Charts.vue'),
+      //   meta: { title: '图表组件', icon: 'el-icon-data-board' },
+      // },
+      // {
+      //   path: 'basic',
+      //   name: 'ComponentsBasic',
+      //   component: () => import('../views/components/Basic.vue'),
+      //   meta: { title: '基础组件', icon: 'el-icon-box' },
+      // },
     ]
   }
 ];
 
-// 组件示例路由
-const componentRoutes: RouteRecordRaw[] = [
-  {
-    path: '/components',
-    name: 'Components',
-    redirect: '/components/basic',
-    children: []
-  }
-];
-
-// 完整示例路由
-const demoRoutes: RouteRecordRaw[] = [
-  {
-    path: '/demos',
-    name: 'Demos',
-    redirect: '/demos/dashboard',
-    children: []
-  }
-];
-
-// 创建路由实例
 const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    {
-      path: '/',
-      redirect: '/core/layout/scale-screen/basic'
-    },
-    ...coreRoutes,
-    ...componentRoutes,
-    ...demoRoutes
-  ]
+  routes
 });
 
 export default router;
