@@ -24,16 +24,22 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '主题系统', icon: 'el-icon-magic-stick' }
       },
       {
-        path: 'transition',
-        name: 'CoreTransition',
-        component: () => import('../views/core/transition/index.vue'),
-        meta: { title: '过渡动画', icon: 'el-icon-video-play' }
-      },
-      {
         path: 'layout',
         name: 'CoreLayout',
         component: () => import('../views/core/layout/index.vue'),
         meta: { title: '布局系统', icon: 'el-icon-grid' }
+      },
+      {
+        path: 'transition',
+        name: 'CoreTransition',
+        component: () => import('../views/core/transition/index.vue'),
+        meta: { title: '过渡动画', icon: 'el-icon-magic-stick' }
+      },
+      {
+        path: 'http',
+        name: 'CoreHttp',
+        component: () => import('../views/core/http/index.vue'),
+        meta: { title: 'HTTP模块', icon: 'el-icon-connection' }
       }
     ]
   },

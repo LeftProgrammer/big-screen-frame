@@ -141,31 +141,37 @@ export class HttpClient {
   /**
    * 发送请求
    */
-  public async request<T = any>(config: RequestConfig): Promise<ResponseData<T>> {
+  public async request<T>(config: RequestConfig): Promise<ResponseData<T>> {
     try {
       // 处理文件上传
       if (config.upload) {
         return this.handleUpload<T>(config);
       }
 
-      // 处理轮询
+      // 处理轮询请求
       if (config.polling?.enabled) {
         return this.handlePolling<T>(config);
       }
 
-      // 使用重试策略
-      const response = await RetryStrategy.execute(
-        () => this.axios.request<ResponseData<T>>(config),
-        {
-          ...this.config.retry,
-          ...config.retry
-        }
-      );
+      // 发送请求
+      const response = await this.axios.request<ResponseData<T>>(config);
+
+      // 如果配置了重试选项且请求失败，进行重试
+      if (config.retry && response.status >= 400) {
+        const retryStrategy = new RetryStrategy();
+        return await retryStrategy.execute(
+          () => this.axios.request<ResponseData<T>>(config),
+          config.retry
+        );
+      }
 
       return response.data;
     } catch (error) {
+      // 错误处理
       if (config.handleError) {
         config.handleError(error);
+      } else if (config.showError !== false) {
+        this.errorManager.handleError(error);
       }
       throw error;
     }
