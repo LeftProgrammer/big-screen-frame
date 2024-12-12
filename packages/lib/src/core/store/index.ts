@@ -9,6 +9,7 @@ import { createPinia } from 'pinia';
 import type { App } from 'vue';
 import { useThemeStore } from './modules/theme';
 import { useLayoutStore } from './modules/layout';
+import { useAuthStore } from './modules/auth';
 
 // 创建 pinia 实例
 const pinia = createPinia();
@@ -19,7 +20,7 @@ export function setupStore(app: App) {
 }
 
 // 导出 store 模块
-export { useThemeStore, useLayoutStore };
+export { useThemeStore, useLayoutStore, useAuthStore };
 
 // 导出 store 实例
 export default pinia;
@@ -28,6 +29,7 @@ export default pinia;
 export function useStore() {
   return {
     theme: useThemeStore(),
-    layout: useLayoutStore()
+    layout: useLayoutStore(),
+    auth: useAuthStore()
   };
 }
