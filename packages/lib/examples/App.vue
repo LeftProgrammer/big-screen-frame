@@ -406,19 +406,19 @@ const isScreenPage = computed(() => route.path === '/screen');
       transition-duration: var(--bsf-transition-duration);
       transition-timing-function: var(--bsf-transition-timing);
 
-      &:hover {
-        background-color: var(--el-fill-color-light);
-      }
+      // &:hover {
+      //   background-color: var(--el-fill-color-light);
+      // }
     }
 
     :deep(.el-menu-item) {
       border-right: 2px solid transparent;
 
-      &.is-active {
-        background-color: var(--el-color-primary-light-9);
-        color: var(--el-color-primary);
-        border-right-color: var(--el-color-primary);
-      }
+      // &.is-active {
+      //   background-color: var(--el-color-primary-light-9);
+      //   color: var(--el-color-primary);
+      //   border-right-color: var(--el-color-primary);
+      // }
     }
   }
 }
@@ -467,9 +467,9 @@ const isScreenPage = computed(() => route.path === '/screen');
     transition-duration: var(--bsf-transition-duration);
     transition-timing-function: var(--bsf-transition-timing);
 
-    &:hover {
-      background-color: var(--el-fill-color-light);
-    }
+    // &:hover {
+    //   background-color: var(--el-fill-color-light);
+    // }
 
     .setting-title {
       display: flex;

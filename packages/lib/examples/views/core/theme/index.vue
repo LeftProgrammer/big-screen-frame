@@ -191,6 +191,7 @@ import { ref, reactive, onMounted, watch } from 'vue';
 import { ThemeManager } from '@lib/core/theme';
 import { useTheme } from '@lib/core/theme';
 import { Sunny, Moon, Monitor, Search } from '@element-plus/icons-vue';
+import { useCssVar } from '@vueuse/core';
 
 // 主题管理器实例
 const themeManager = ThemeManager.getInstance();
@@ -217,30 +218,8 @@ const themeConfig = reactive({
 
 // 主题色更新函数
 const updateThemeColor = (color: string) => {
-  const el = document.documentElement;
-
-  // 获取主题色的 rgb 值
-  const colorObj = new window.Color(color);
-  const rgb = colorObj.toRgb();
-
-  // 设置主题色
-  el.style.setProperty('--el-color-primary', color);
-
-  // 设置主题色的不同透明度变体
-  for (let i = 1; i <= 9; i++) {
-    const mixColor = i === 2 ? 'var(--el-color-white)' : 'var(--el-color-white)';
-    const mixAmount = i / 10;
-    el.style.setProperty(
-      `--el-color-primary-light-${i}`,
-      colorObj.mix(mixColor, mixAmount).toRgbString()
-    );
-  }
-
-  // 设置主题色的暗色变体
-  el.style.setProperty(
-    '--el-color-primary-dark-2',
-    colorObj.mix('var(--el-color-black)', 0.2).toRgbString()
-  );
+  const primaryColor = useCssVar('--el-color-primary');
+  primaryColor.value = color;
 };
 
 // 预览数据

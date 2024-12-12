@@ -6,11 +6,13 @@ import { ThemeManager } from '@lib/core/theme';
 import './utils/color';
 
 // 导入样式文件
+// 首先导入 Element Plus 的基础样式
+import 'element-plus/dist/index.css';
+// 然后导入 Element Plus 的暗黑模式变量
+import 'element-plus/theme-chalk/dark/css-vars.css';
+// 最后导入我们自己的样式，这样可以在需要时覆盖 Element Plus 的样式
 import '@lib/styles/index.scss';
 import './styles/index.scss';
-// Element Plus 暗黑模式变量必须在其他样式之后导入
-import 'element-plus/theme-chalk/dark/css-vars.css';
-import 'element-plus/dist/index.css';
 
 // 初始化主题管理器
 const themeManager = new ThemeManager({
@@ -19,17 +21,12 @@ const themeManager = new ThemeManager({
 });
 
 // 根据系统主题设置默认主题
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-const theme = prefersDark ? 'dark' : 'light';
+themeManager.setTheme('system');
 
-// 设置主题和 Element Plus 暗黑模式
-themeManager.setTheme(theme);
-document.documentElement.classList.toggle('dark', prefersDark);
-document.documentElement.setAttribute('data-theme', theme);
-
+// 创建应用实例
 const app = createApp(App);
 
-// 使用插件
+// 注册插件
 app.use(router);
 app.use(ElementPlus);
 
