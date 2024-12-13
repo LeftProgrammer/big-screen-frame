@@ -1,11 +1,17 @@
 // WebSocket数据处理模块
-import type { WebSocketService } from './types'
-export * from './types'
+export * from './types';
+export * from './services/websocket.service';
+export * from './middleware';
+export * from './composables/useWebSocket';
 
-export class WebSocketServiceImpl implements WebSocketService {
-    constructor() {}
-}
+// 导出工厂函数
+import { WebSocketConfig } from './types';
+import { WebSocketServiceImpl } from './services/websocket.service';
 
-export interface WebSocketConfig {
-    // 待定义
-}
+export const createWebSocketService = (config?: Partial<WebSocketConfig>) => {
+  const service = new WebSocketServiceImpl();
+  if (config) {
+    service.connect(config);
+  }
+  return service;
+};

@@ -7,7 +7,6 @@ import type {
   NavigationGuard,
   NavigationHookAfter
 } from 'vue-router';
-import NProgress from 'nprogress';
 import type {
   RouterService,
   RouterConfig,
@@ -33,12 +32,9 @@ class RouterCacheManagerImpl implements RouterCacheManager {
   }
 
   add(name: string): void {
-    if (this.config.exclude?.includes(name)) return;
-    if (this.config.max && this.cachedViews.size >= this.config.max) {
-      const firstView = this.cachedViews.values().next().value;
-      this.cachedViews.delete(firstView);
+    if (!this.cachedViews.has(name)) {
+      this.cachedViews.add(name);
     }
-    this.cachedViews.add(name);
   }
 
   remove(name: string): void {
@@ -88,11 +84,6 @@ export class RouterServiceImpl implements RouterService {
     // 初始化插件管理器
     this.pluginManager = new RouterPluginManager(this);
 
-    // 初始化进度条
-    if (config.progress) {
-      NProgress.configure(config.progress);
-    }
-
     // 添加默认路由
     if (config.defaultRoutes) {
       const defaultRoutes = RouteTemplateFactory.createBasicRoutes();
@@ -112,9 +103,6 @@ export class RouterServiceImpl implements RouterService {
 
     // 设置全局后置钩子
     this.router.afterEach(async (to, from) => {
-      // 结束进度条
-      this.finishProgress();
-
       // 缓存处理
       if (to.name && to.meta?.keepAlive) {
         this._cache.add(to.name as string);
@@ -125,20 +113,24 @@ export class RouterServiceImpl implements RouterService {
     });
   }
 
-  public static getInstance(config: RouterConfig): RouterService {
-    if (!RouterServiceImpl.instances.has('default')) {
-      RouterServiceImpl.instances.set('default', new RouterServiceImpl(config));
+  /**
+   * 获取路由服务实例
+   */
+  static getInstance(config: RouterConfig): RouterService {
+    const key = config.name || 'default';
+    if (!RouterServiceImpl.instances.has(key)) {
+      RouterServiceImpl.instances.set(key, new RouterServiceImpl(config));
     }
-    return RouterServiceImpl.instances.get('default')!;
+    return RouterServiceImpl.instances.get(key)!;
   }
 
   // 中间件相关方法
   addMiddleware(middleware: any): void {
-    this.middlewareManager.addMiddleware(middleware);
+    this.middlewareManager.add(middleware);
   }
 
   removeMiddleware(name: string): void {
-    this.middlewareManager.removeMiddleware(name);
+    this.middlewareManager.remove(name);
   }
 
   // 插件相关方法
@@ -152,11 +144,15 @@ export class RouterServiceImpl implements RouterService {
 
   // 模板相关方法
   addTemplateRoutes(type: 'basic' | 'screen', options?: any): void {
-    const routes =
-      type === 'basic'
-        ? RouteTemplateFactory.createBasicRoutes(options)
-        : RouteTemplateFactory.createScreenRoutes(options);
-
+    let routes: RouteRecordRaw[] = [];
+    switch (type) {
+      case 'basic':
+        routes = RouteTemplateFactory.createBasicRoutes(options);
+        break;
+      case 'screen':
+        routes = RouteTemplateFactory.createScreenRoutes(options);
+        break;
+    }
     routes.forEach(route => this.addRoute(route));
   }
 
@@ -191,16 +187,7 @@ export class RouterServiceImpl implements RouterService {
   }
 
   addRouteModule(module: RouterModule): void {
-    // 添加模块路由
     module.routes.forEach(route => this.addRoute(route));
-
-    // 添加模块级导航守卫
-    if (module.beforeEnter) {
-      this.router.beforeEach(module.beforeEnter);
-    }
-    if (module.afterEnter) {
-      this.router.afterEach(module.afterEnter);
-    }
   }
 
   hasRoute(name: string): boolean {
@@ -217,7 +204,7 @@ export class RouterServiceImpl implements RouterService {
   }
 
   getHistory(): string[] {
-    // 实现路由历史记录
+    // TODO: 实现历史记录
     return [];
   }
 
@@ -239,19 +226,18 @@ export class RouterServiceImpl implements RouterService {
   }
 
   off(event: RouterEventType, handler: RouterEventHandler): void {
-    const handlers = this.eventHandlers.get(event);
-    if (handlers) {
-      handlers.delete(handler);
+    if (this.eventHandlers.has(event)) {
+      this.eventHandlers.get(event)!.delete(handler);
     }
   }
 
-  private async triggerEvent(
+  async triggerEvent(
     event: RouterEventType,
     to: RouteLocationNormalized,
     from: RouteLocationNormalized
   ): Promise<void> {
-    const handlers = this.eventHandlers.get(event);
-    if (handlers) {
+    if (this.eventHandlers.has(event)) {
+      const handlers = this.eventHandlers.get(event)!;
       for (const handler of handlers) {
         await handler(to, from);
       }
@@ -259,7 +245,7 @@ export class RouterServiceImpl implements RouterService {
   }
 
   // 缓存管理
-  get cache(): RouterCacheManager {
+  cache(): RouterCacheManager {
     return this._cache;
   }
 
@@ -270,38 +256,32 @@ export class RouterServiceImpl implements RouterService {
 
   // 多实例支持方法
   createInstance(name: string, config: RouterConfig): RouterService {
-    if (!RouterServiceImpl.instances.has(name)) {
-      RouterServiceImpl.instances.set(name, new RouterServiceImpl(config));
+    if (RouterServiceImpl.instances.has(name)) {
+      throw new Error(`Router instance "${name}" already exists`);
     }
-    return RouterServiceImpl.instances.get(name)!;
+    const instance = new RouterServiceImpl({ ...config, name });
+    RouterServiceImpl.instances.set(name, instance);
+    return instance;
   }
 
   switchInstance(name: string): void {
     if (!RouterServiceImpl.instances.has(name)) {
       throw new Error(`Router instance "${name}" not found`);
     }
-    // 实现实例切换逻辑
+    // TODO: 实现实例切换
   }
 
   getInstance(name: string): RouterService | undefined {
     return RouterServiceImpl.instances.get(name);
   }
 
-  // 进度条控制方法
-  startProgress(): void {
-    if (this.config.progress) {
-      NProgress.start();
-    }
-  }
-
-  finishProgress(): void {
-    if (this.config.progress) {
-      NProgress.done();
-    }
-  }
-
   // 工具方法
   resolve(to: RouteLocationRaw): RouteLocationNormalized {
     return this.router.resolve(to);
   }
+}
+
+// 导出默认实例创建方法
+export function createRouterService(config: RouterConfig): RouterService {
+  return RouterServiceImpl.getInstance(config);
 }

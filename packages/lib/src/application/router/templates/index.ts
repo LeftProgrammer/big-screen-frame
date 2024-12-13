@@ -6,30 +6,52 @@ import type { Component } from 'vue';
  */
 export const basicRoutes: RouteRecordRaw[] = [
   {
+    path: '/',
+    name: 'Home',
+    redirect: '/dashboard'
+  },
+  {
     path: '/login',
     name: 'Login',
-    component: () => import('../components/BasicLogin.vue'),
+    component: () => import('../../../components/default-pages/BasicLogin.vue'),
     meta: {
       title: '登录',
-      hidden: true
+      layout: 'blank'
     }
   },
   {
-    path: '/404',
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: () => import('../../../components/default-pages/BasicDashboard.vue'),
+    meta: {
+      title: '仪表盘',
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: () => import('../components/404.vue'),
+    component: () => import('../../../components/default-pages/BasicNotFound.vue'),
     meta: {
       title: '404',
-      hidden: true
+      layout: 'blank'
     }
-  },
+  }
+];
+
+/**
+ * 管理路由模板
+ */
+export const adminRoutes: RouteRecordRaw[] = [
   {
-    path: '/403',
-    name: 'Forbidden',
-    component: () => import('../components/403.vue'),
+    path: '/admin',
+    name: 'Admin',
+    component: () =>
+      import('../../../../examples/views/application/router/components/BasicAdmin.vue'),
     meta: {
-      title: '403',
-      hidden: true
+      title: '管理',
+      requiresAuth: true,
+      roles: ['admin']
     }
   }
 ];
@@ -41,12 +63,14 @@ export const screenRoutes: RouteRecordRaw[] = [
   {
     path: '/screen',
     name: 'Screen',
-    component: () => import('../components/ScreenLayout.vue'),
+    component: () =>
+      import('../../../../examples/views/application/router/components/ScreenLayout.vue'),
     children: [
       {
         path: 'index',
         name: 'ScreenIndex',
-        component: () => import('../components/ScreenIndex.vue'),
+        component: () =>
+          import('../../../../examples/views/application/router/components/ScreenIndex.vue'),
         meta: {
           title: '大屏首页',
           keepAlive: true
@@ -66,18 +90,18 @@ export class RouteTemplateFactory {
   static createBasicRoutes(options?: {
     loginComponent?: Component;
     notFoundComponent?: Component;
-    forbiddenComponent?: Component;
+    dashboardComponent?: Component;
   }): RouteRecordRaw[] {
     const routes = [...basicRoutes];
 
     if (options?.loginComponent) {
-      routes[0].component = options.loginComponent;
+      routes[1].component = options.loginComponent;
     }
     if (options?.notFoundComponent) {
-      routes[1].component = options.notFoundComponent;
+      routes[3].component = options.notFoundComponent;
     }
-    if (options?.forbiddenComponent) {
-      routes[2].component = options.forbiddenComponent;
+    if (options?.dashboardComponent) {
+      routes[2].component = options.dashboardComponent;
     }
 
     return routes;
@@ -101,6 +125,19 @@ export class RouteTemplateFactory {
     }
     if (options?.children) {
       routes[0].children!.push(...options.children);
+    }
+
+    return routes;
+  }
+
+  /**
+   * 创建管理路由
+   */
+  static createAdminRoutes(options?: { adminComponent?: Component }): RouteRecordRaw[] {
+    const routes = [...adminRoutes];
+
+    if (options?.adminComponent) {
+      routes[0].component = options.adminComponent;
     }
 
     return routes;

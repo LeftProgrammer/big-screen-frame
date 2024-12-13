@@ -37,13 +37,6 @@ export interface RouterConfig {
     onAfterLeave?: (el: Element) => void;
   };
 
-  // 进度条配置
-  progress?: {
-    color?: string;
-    duration?: number;
-    showSpinner?: boolean;
-  };
-
   // 缓存配置
   cache?: {
     max?: number;
@@ -105,6 +98,8 @@ export interface RouterCacheManager {
  * 路由服务接口
  */
 export interface RouterService {
+  cache: RouterCacheManager;
+
   // 路由导航
   push(to: RouteLocationRaw): Promise<void>;
   replace(to: RouteLocationRaw): Promise<void>;
@@ -131,9 +126,6 @@ export interface RouterService {
   on(event: RouterEventType, handler: RouterEventHandler): void;
   off(event: RouterEventType, handler: RouterEventHandler): void;
 
-  // 缓存管理
-  cache: RouterCacheManager;
-
   // 过渡动画
   setTransition(config: RouterConfig['transition']): void;
 
@@ -141,10 +133,6 @@ export interface RouterService {
   createInstance(name: string, config: RouterConfig): RouterService;
   switchInstance(name: string): void;
   getInstance(name: string): RouterService | undefined;
-
-  // 进度条控制
-  startProgress(): void;
-  finishProgress(): void;
 
   // 工具方法
   resolve(to: RouteLocationRaw): RouteLocationNormalized;

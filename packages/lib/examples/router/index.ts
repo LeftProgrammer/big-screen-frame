@@ -86,6 +86,51 @@ const routes: RouteRecordRaw[] = [
           title: '权限控制',
           icon: 'UserFilled'
         }
+      },
+      {
+        path: 'router',
+        name: 'Router',
+        component: () => import('../views/application/router/index.vue'),
+        meta: {
+          title: '路由示例',
+          icon: 'Share'
+        }
+      },
+      {
+        path: 'usage',
+        name: 'RouterBasic',
+        component: () => import('../views/application/router/basic-usage.vue'),
+        meta: {
+          title: '基础用法',
+          icon: 'Operation'
+        }
+      },
+      {
+        path: 'middleware',
+        name: 'RouterMiddleware',
+        component: () => import('../views/application/router/middleware-example.vue'),
+        meta: {
+          title: '中间件示例',
+          icon: 'Switch'
+        }
+      },
+      {
+        path: 'plugin',
+        name: 'RouterPlugin',
+        component: () => import('../views/application/router/plugin-example.vue'),
+        meta: {
+          title: '插件示例',
+          icon: 'Connection'
+        }
+      },
+      {
+        path: 'template',
+        name: 'RouterTemplate',
+        component: () => import('../views/application/router/template-example.vue'),
+        meta: {
+          title: '模板示例',
+          icon: 'Files'
+        }
       }
     ]
   },
