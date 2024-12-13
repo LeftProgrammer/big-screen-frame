@@ -98,11 +98,20 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'usage',
-        name: 'RouterBasic',
+        name: 'RouterUsage',
         component: () => import('../views/application/router/basic-usage.vue'),
         meta: {
-          title: '基础用法',
-          icon: 'Operation'
+          title: '路由示例',
+          icon: 'Share'
+        }
+      },
+      {
+        path: 'websocket',
+        name: 'WebSocketExample',
+        component: () => import('../views/application/websocket/websocket-example.vue'),
+        meta: {
+          title: 'WebSocket示例',
+          icon: 'Connection'
         }
       },
       {
