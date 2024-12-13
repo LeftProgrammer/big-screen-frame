@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { AuthState, UserInfo, AuthError } from '../../auth/types/auth.types';
+import type { AuthState, UserInfo, AuthError } from '@lib/application/auth/types/auth.types';
 import { storage } from '@lib/core/utils';
 
 export const useAuthStore = defineStore('auth', {

@@ -44,6 +44,52 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   {
+    path: '/application',
+    name: 'Application',
+    meta: {
+      title: '应用',
+      icon: 'Application'
+    },
+    children: [
+      {
+        path: 'auth',
+        name: 'Auth',
+        component: () => import('../views/application/auth/index.vue'),
+        meta: {
+          title: '认证示例',
+          icon: 'Lock'
+        }
+      },
+      {
+        path: 'basic',
+        name: 'BasicLogin',
+        component: () => import('../views/application/auth/basic-login.vue'),
+        meta: {
+          title: '基础登录',
+          icon: 'Key'
+        }
+      },
+      {
+        path: 'custom',
+        name: 'CustomAuth',
+        component: () => import('../views/application/auth/custom-auth.vue'),
+        meta: {
+          title: '自定义认证',
+          icon: 'SetUp'
+        }
+      },
+      {
+        path: 'permission',
+        name: 'PermissionControl',
+        component: () => import('../views/application/auth/permission-control.vue'),
+        meta: {
+          title: '权限控制',
+          icon: 'UserFilled'
+        }
+      }
+    ]
+  },
+  {
     path: '/components',
     name: 'Components',
     meta: { title: '组件示例', icon: 'el-icon-menu' },

@@ -10,6 +10,7 @@ import type { App } from 'vue';
 import { useThemeStore } from './modules/theme';
 import { useLayoutStore } from './modules/layout';
 import { useAuthStore } from './modules/auth';
+import { useAuthStore } from './modules/auth';
 
 // 创建 pinia 实例
 const pinia = createPinia();

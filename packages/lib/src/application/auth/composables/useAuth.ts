@@ -13,7 +13,7 @@ export function useAuth(config?: Partial<AuthConfig>) {
   const authStore = useAuthStore();
 
   // 计算属性
-  const isAuthenticated = computed(() => authStore.isAuthenticated);
+  const isLoggedIn = computed(() => authStore.isAuthenticated);
   const userInfo = computed(() => authStore.userInfo);
   const loading = computed(() => authStore.loading);
   const error = computed(() => authStore.error);
@@ -104,9 +104,19 @@ export function useAuth(config?: Partial<AuthConfig>) {
     return authService.checkAuth();
   };
 
+  // TODO: 这些方法需要实现
+  const refreshToken = () => {};
+  const updateUserInfo = () => {};
+  const hasPermission = () => {};
+  const hasRole = () => {};
+  const hasAnyPermission = () => {};
+  const hasAllPermissions = () => {};
+  const hasAnyRole = () => {};
+  const hasAllRoles = () => {};
+
   return {
     // 状态
-    isAuthenticated,
+    isLoggedIn,
     userInfo,
     loading,
     error,
@@ -114,7 +124,14 @@ export function useAuth(config?: Partial<AuthConfig>) {
     // 方法
     login,
     logout,
-    getCurrentUser,
-    checkAuth
+    refreshToken,
+    updateUserInfo,
+    checkAuth,
+    hasPermission,
+    hasRole,
+    hasAnyPermission,
+    hasAllPermissions,
+    hasAnyRole,
+    hasAllRoles
   };
 }

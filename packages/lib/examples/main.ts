@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import ElementPlus from 'element-plus';
 import { ThemeManager } from '@lib/core/theme';
+import { pinia } from './store';
 import './utils/color';
 
 // 导入样式文件
@@ -29,6 +30,7 @@ const app = createApp(App);
 // 注册插件
 app.use(router);
 app.use(ElementPlus);
+app.use(pinia);
 
 // 挂载应用
 app.mount('#app');

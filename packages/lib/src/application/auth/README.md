@@ -17,7 +17,7 @@
 ### 基础使用
 
 ```typescript
-import { useAuth } from '@lib/core/auth';
+import { useAuth } from '@lib/application/auth';
 
 const auth = useAuth();
 

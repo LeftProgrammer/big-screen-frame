@@ -40,7 +40,7 @@ import { ref, reactive } from 'vue';
 import { ElMessage } from 'element-plus';
 import { User, Lock } from '@element-plus/icons-vue';
 import type { FormInstance } from 'element-plus';
-import { useAuth } from '../composables/useAuth';
+import { useAuth } from '@lib/application/auth';
 import type { LoginParams } from '../types/auth.types';
 
 const emit = defineEmits<{
