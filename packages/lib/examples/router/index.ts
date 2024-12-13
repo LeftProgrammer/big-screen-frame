@@ -107,10 +107,19 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'websocket',
-        name: 'WebSocketExample',
+        name: 'ApplicationWebSocket',
         component: () => import('../views/application/websocket/websocket-example.vue'),
         meta: {
           title: 'WebSocket示例',
+          icon: 'Connection'
+        }
+      },
+      {
+        path: 'sse',
+        name: 'ApplicationSSE',
+        component: () => import('../views/application/sse/sse-example.vue'),
+        meta: {
+          title: 'SSE示例',
           icon: 'Connection'
         }
       },
