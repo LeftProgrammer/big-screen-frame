@@ -1,11 +1,19 @@
 // SSE数据处理模块
-import type { SSEService } from './types'
-export * from './types'
+import type { SSEConfig, SSEService } from './types';
+import { SSEServiceImpl } from './services/sse.service';
 
-export class SSEServiceImpl implements SSEService {
-    constructor() {}
-}
+export * from './types';
+export * from './services/sse.service';
+export * from './middleware';
+export * from './composables/useSSE';
 
-export interface SSEConfig {
-    // 待定义
+/**
+ * 创建SSE服务实例
+ */
+export function createSSEService(config?: Partial<SSEConfig>): SSEService {
+  const service = new SSEServiceImpl();
+  if (config) {
+    service.connect(config);
+  }
+  return service;
 }

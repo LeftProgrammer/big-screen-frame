@@ -179,8 +179,12 @@ ws.value?.on('error', (error: any) => {
 
 // Cleanup
 onUnmounted(() => {
-  if (isConnected.value) {
-    wsDisconnect();
+  try {
+    if (ws.value && isConnected.value) {
+      wsDisconnect();
+    }
+  } catch (error) {
+    console.error('Error during cleanup:', error);
   }
 });
 </script>

@@ -9,69 +9,72 @@ export function useWebSocket(config: WebSocketConfig) {
   const connecting = ref(false);
   const error = ref<Error | null>(null);
   const data: Ref<any> = ref(null);
+  let isDestroyed = false;
 
   // 连接状态处理
   const handleConnectionChange = () => {
-    connected.value = ws.value.connected;
-    connecting.value = ws.value.connecting;
+    if (!isDestroyed) {
+      connected.value = ws.value.connected;
+      connecting.value = ws.value.connecting;
+    }
   };
 
   // 错误处理
   const handleError = (event: Event) => {
-    error.value = new Error('WebSocket error');
-    handleConnectionChange();
+    if (!isDestroyed) {
+      error.value = new Error('WebSocket error');
+      handleConnectionChange();
+    }
   };
 
   // 消息处理
   const handleMessage = (event: MessageEvent) => {
-    try {
-      data.value = event.data;
-    } catch (err) {
-      error.value = err as Error;
+    if (!isDestroyed) {
+      try {
+        data.value = event.data;
+      } catch (err) {
+        error.value = err as Error;
+      }
     }
   };
 
   // 连接处理
   const connect = async () => {
+    if (isDestroyed) return;
+
     try {
       error.value = null;
       connecting.value = true;
       await ws.value.connect(config);
-      connected.value = true;
+      if (!isDestroyed) {
+        connected.value = true;
+      }
     } catch (err) {
-      error.value = err as Error;
-      connected.value = false;
+      if (!isDestroyed) {
+        error.value = err as Error;
+        connected.value = false;
+      }
     } finally {
-      connecting.value = false;
+      if (!isDestroyed) {
+        connecting.value = false;
+      }
     }
   };
 
   // 断开连接
   const disconnect = () => {
-    ws.value.disconnect();
-    connected.value = false;
-    connecting.value = false;
-  };
-
-  // 重新连接
-  const reconnect = async () => {
-    await ws.value.reconnect();
+    if (!isDestroyed && ws.value) {
+      ws.value.disconnect();
+      connected.value = false;
+      connecting.value = false;
+    }
   };
 
   // 发送消息
-  const send = (message: any) => {
-    if (!connected.value) {
-      throw new Error('WebSocket is not connected');
+  const send = (data: any) => {
+    if (!isDestroyed && ws.value && connected.value) {
+      ws.value.send(data);
     }
-    ws.value.send(message);
-  };
-
-  // 发送 JSON 消息
-  const sendJson = (data: object) => {
-    if (!connected.value) {
-      throw new Error('WebSocket is not connected');
-    }
-    ws.value.sendJson(data);
   };
 
   // 生命周期处理
@@ -83,24 +86,26 @@ export function useWebSocket(config: WebSocketConfig) {
     connect();
   });
 
+  // 组件卸载时清理
   onUnmounted(() => {
-    ws.value.off('open', handleConnectionChange);
-    ws.value.off('close', handleConnectionChange);
-    ws.value.off('error', handleError);
-    ws.value.off('message', handleMessage);
-    disconnect();
+    isDestroyed = true;
+    try {
+      if (ws.value) {
+        disconnect();
+      }
+    } catch (error) {
+      console.error('Error during WebSocket cleanup:', error);
+    }
   });
 
   return {
     ws,
-    connected,
-    connecting,
-    error,
     data,
+    error,
+    isConnected: connected,
+    isConnecting: connecting,
     connect,
     disconnect,
-    reconnect,
-    send,
-    sendJson
+    send
   };
 }
