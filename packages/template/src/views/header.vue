@@ -1,86 +1,110 @@
 <script setup lang="ts">
-import { reactive } from "vue";
-import dayjs from 'dayjs';
-import type {DateDataType} from "./index.d"
-import {useSettingStore} from "@/stores/index"
-
+import { reactive, watch, ref } from "vue";
+import dayjs from "dayjs";
+import type { DateDataType } from "./index.d";
+// import { useSettingStore } from "@/stores/index";
+import { useUserStore } from "@/utils/userStore";
+import { useRouter } from "vue-router";
+import { ElMessage } from "element-plus";
+const userStore = useUserStore();
+const router = useRouter();
+const logout = async () => {
+  const res = await userStore.logout();
+  if (res.code === 200) {
+    // router.push("/login");
+    ElMessage.success(res.message);
+    // 刷新当前页面
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+  }
+};
 const dateData = reactive<DateDataType>({
   dateDay: "",
   dateYear: "",
   dateWeek: "",
-  timing:null
+  timing: null as any,
+  nowTime: "",
 });
-
-const { setSettingShow} =useSettingStore()
-const weekday= ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]
+// const { setSettingShow } = useSettingStore();
+const weekday = [
+  "星期日",
+  "星期一",
+  "星期二",
+  "星期三",
+  "星期四",
+  "星期五",
+  "星期六",
+];
 const timeFn = () => {
+  dateData.dateWeek = weekday[dayjs().day()];
+  // 获取今天得日期
+  dateData.dateDay = dayjs().format("YYYY-MM-DD");
   dateData.timing = setInterval(() => {
-    dateData.dateDay = dayjs().format("YYYY-MM-DD hh : mm : ss");
-    dateData.dateWeek = weekday[dayjs().day()];
+    dateData.nowTime = dayjs().format("HH : mm : ss");
   }, 1000);
 };
-timeFn()
+timeFn();
+
+const back = () => {
+  // router.push('/analysis');
+  router.go(-1);
+};
+
+let nowPath = ref("/analysis");
+
+// 监听路由变化
+watch(
+  router.currentRoute,
+  (to, from) => {
+    console.log(to, from);
+    nowPath.value = to.path;
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
-  <div class="d-flex jc-center title_wrap">
-    <div class="zuojuxing"></div>
-    <div class="youjuxing"></div>
-    <div class="guang"></div>
-    <div class="d-flex jc-center">
-      <div class="title">
-        <span class="title-text">互联网设备可视化平台</span>
-      </div>
-    </div>
+  <div class="d-flex jc-center title_wrap animate-enter">
     <div class="timers">
-      {{ dateData.dateYear }} {{ dateData.dateWeek }} {{ dateData.dateDay }}
+      <span class="font-bold text-xl"> {{ dateData.nowTime }}</span>
+      <span class="mx-3 text-gray-400">|</span>
+      <span class="font text-sm text-gray-400">{{ dateData.dateWeek }}</span>
+      <span class="mx-3 text-gray-400">|</span>
+      <span class="text-3 text-sm text-gray-400">{{ dateData.dateDay }}</span>
 
-      <div class="setting_icon"   @click="setSettingShow(true)">
-          <img src="@/assets/img/headers/setting.png" alt="设置">
+      <!-- <div class="setting_icon" @click="setSettingShow(true)">
+        <img src="@/assets/img/headers/setting.png" alt="设置" />
+      </div> -->
+    </div>
+    <!-- <div class="d-flex jc-center">
+      <div class="title">
+        <span class="title-text">{{ screenTitle }}</span>
       </div>
+    </div> -->
+    <div class="right" v-if="nowPath.includes('/analysis')">
+      <div class="dataView" @click="router.push('/dataView')"></div>
+      <div class="video" @click="router.push('/specialVideo')"></div>
+      <div class="loginout" @click="logout"></div>
+    </div>
+    <div class="right" v-else>
+      <div class="back" @click="back"></div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .title_wrap {
-  height: 60px;
-  background-image: url("../assets/img/top.png");
+  width: 100%;
+  height: 118px;
+  background-image: url("@/assets/img/big-data/index_1.webp");
   background-size: cover;
   background-position: center center;
   position: relative;
-  margin-bottom: 4px;
-
-  .guang {
-    position: absolute;
-    bottom: -26px;
-    background-image: url("../assets/img/guang.png");
-    background-position: 80px center;
-    width: 100%;
-    height: 56px;
-  }
-
-  .zuojuxing,
-  .youjuxing {
-    position: absolute;
-    top: -2px;
-    width: 140px;
-    height: 6px;
-    background-image: url("../assets/img/headers/juxing1.png");
-  }
-
-  .zuojuxing {
-    left: 11%;
-  }
-
-  .youjuxing {
-    right: 11%;
-    transform: rotate(180deg);
-  }
 
   .timers {
     position: absolute;
-    right: 0;
+    left: 24px;
     top: 30px;
     font-size: 18px;
     display: flex;
@@ -91,13 +115,85 @@ timeFn()
       height: 20px;
       cursor: pointer;
       margin-left: 12px;
-      img{
+      img {
         width: 100%;
         height: 100%;
       }
     }
   }
+  .right {
+    position: absolute;
+    right: 24px;
+    top: 30px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    .dataView {
+      width: 88px;
+      height: 32px;
+      background-image: url("@/assets/img/big-data/dataView.png");
+      background-size: cover;
+      background-position: center center;
+      cursor: pointer;
+      margin-right: 24px;
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+    .video {
+      width: 88px;
+      height: 32px;
+      background-image: url("@/assets/img/big-data/video.png");
+      background-size: cover;
+      background-position: center center;
+      cursor: pointer;
+      margin-right: 24px;
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+    .back {
+      width: 88px;
+      height: 32px;
+      background-image: url("@/assets/img/big-data/back.png");
+      background-size: cover;
+      background-position: center center;
+      cursor: pointer;
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+    .loginout {
+      width: 45px;
+      height: 32px;
+      background-image: url("@/assets/img/big-data/loginout.svg");
+      background-size: cover;
+      background-position: center center;
+      cursor: pointer;
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  // 添加动画相关样式
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: fadeInDown 0.8s ease forwards;
 }
+
+// 添加动画关键帧
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .title {
   position: relative;
   // width: 500px;

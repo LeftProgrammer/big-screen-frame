@@ -8,6 +8,7 @@
       :style="{ ...styles.wrapper, ...wrapperStyle }"
       class="screen-wrapper"
       ref="screenWrapper"
+      id="scale-screen"
     >
       <slot></slot>
     </div>

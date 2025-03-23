@@ -4,10 +4,121 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IofTV-Screen-Vue3</title>
+    <title>钦州海风大屏项目</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/misans@4.0.0/lib/Latin/MiSansLatin-Medium.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.byted-static.com/xgplayer/3.0.10/dist/index.min.css"
+    />
+
+    <script
+      src="http://api.tianditu.gov.cn/api?v=4.0&tk=09540439c305d3df15c14eee52639ab9"
+      type="text/javascript"
+    ></script>
   </head>
   <body>
+    <script
+      src="https://unpkg.byted-static.com/xgplayer/3.0.10/dist/index.min.js"
+      charset="utf-8"
+    ></script>
+    <script
+      src="https://unpkg.byted-static.com/xgplayer-hls/3.0.10/dist/index.min.js"
+      charset="utf-8"
+    ></script>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
+  <style lang="scss">
+    body {
+      /* font-family: MiSans; */
+    }
+
+    /* 滚动条优化 start */
+    ::-webkit-scrollbar {
+      width: 0px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #003181;
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #003181;
+    }
+    ::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+
+    /* 弹窗样式优化 */
+    .popover-content {
+      background: linear-gradient(180deg, #0e1a58 0%, #08162f 100%) !important;
+      box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.2) !important;
+      border-radius: 0px 0px 0px 0px;
+      border: 1px solid !important;
+      border-image: linear-gradient(
+          180deg,
+          rgba(115, 147, 255, 1),
+          rgba(45, 81, 201, 0.17)
+        )
+        1 1 !important;
+      .el-popper__arrow:before {
+        background-color: #101a30 !important;
+      }
+      .el-popper__arrow:before {
+        border: 1px solid #2f4b83 !important;
+      }
+      .el-table {
+        --el-table-border-color: transparent;
+        --el-table-border: 0px solid #1f5481;
+        --el-table-text-color: #dbecf5;
+        --el-table-header-text-color: #dbecf5;
+        /* --el-table-row-hover-bg-color: rgba(255, 255, 255, 0.1); */
+        --el-table-current-row-bg-color: transparent;
+        --el-table-header-bg-color: transparent;
+        --el-table-fixed-box-shadow: var(--el-box-shadow-light);
+        --el-table-bg-color: transparent;
+        --el-table-tr-bg-color: transparent;
+        --el-table-expanded-cell-bg-color: transparent;
+        --el-table-fixed-left-column: inset 10px 0 10px -10px rgba(0, 0, 0, 0.15);
+        --el-table-fixed-right-column: inset -10px 0 10px -10px
+          rgba(0, 0, 0, 0.15);
+        --el-table-index: var(--el-index-normal);
+        background-color: transparent;
+        box-sizing: border-box;
+        color: var(--el-table-text-color);
+        font-size: 14px;
+        height: -moz-fit-content;
+        height: fit-content;
+        max-width: 100%;
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+
+        .el-table__row:hover {
+          background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.06) 0%,
+            rgba(255, 255, 255, 0.2) 100%
+          );
+        }
+        tr:hover > td.el-table__cell {
+          background-color: transparent;
+        }
+        ::v-deep .el-table__header-wrapper {
+          .el-table__header {
+            .el-table__cell {
+              border: 1px solid #fff;
+            }
+          }
+        }
+      }
+    }
+  </style>
 </html>

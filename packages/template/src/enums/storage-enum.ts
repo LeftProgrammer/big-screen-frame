@@ -1,6 +1,6 @@
 export enum StorageEnum {
   // token 
-  GB_TOKEN_STORE = 'GB_TOKEN_STORE',
+  ACCESS_TOKEN = 'ACCESS_TOKEN',
 
   // 语言
   YH_LANG_STORE = 'YH_LANG',

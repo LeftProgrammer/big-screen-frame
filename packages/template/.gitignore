@@ -27,3 +27,9 @@ components.d.ts
 *.njsproj
 *.sln
 *.sw?
+
+packages/docs/.vitepress/cache
+packages/*/dist
+packages/*/types
+
+*.tsbuildinfo

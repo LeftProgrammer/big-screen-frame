@@ -1,54 +1,39 @@
-import {GET,POST,FILE,FILEPOST,PUT,GETNOBASE} from "../api";
-const indexUrl=  {
-    'leftTop':'/bigscreen/countDeviceNum',//左上
-    'leftCenter':'/bigscreen/countUserNum',//左中
-    "centerMap":"/bigscreen/centerMap",
-    "centerBottom":"/bigscreen/installationPlan",
+import { GET, POST, FILE, FILEPOST, PUT, GETNOBASE } from "../api";
 
-    'leftBottom':"/bigscreen/leftBottom", //坐下
-    'rightTop':"/bigscreen/alarmNum", //报警次数
-    'rightBottom':'/bigscreen/rightBottom',//右下 
-    'rightCenter':'/bigscreen/ranking',// 报警排名
+//字典标签专用（通过code获取字典数组）
+export const ajaxGetDictItems = async (code: string, params: any) => {
+    return await GET(`/sys/dict/getDictItems/${code}`, params).then(({ success, result }) => {
+        if (success) {
+            let res = result.map((item: any) => ({ ...item, label: item.text }))
+            console.log('------- 从DB中获取到了字典-------dictCode : ', code, res)
+            return Promise.resolve(res)
+        } else {
+            console.error('getDictItems error: : ', result)
+            return Promise.resolve([])
+        }
+    }).catch((res) => {
+        console.error('getDictItems error: ', res)
+        return Promise.resolve([])
+    })
 }
 
-export default indexUrl
-
-/**左上--设备内总览 */
-export const countDeviceNum=(param:any={})=>{
-    return GET(indexUrl.leftTop,param)
+/**获取项目信息 */
+export const ProjectInfo = (params: any = {}) => {
+    return GET('/dashboard/information/bigScreen/projectInfo', params)
 }
 
-/**左中--用户总览 */
-export const countUserNum=(param:any={})=>{
-    return GET(indexUrl.leftCenter,param)
-}
+// 字典
+export const queryTreeList = (params: any = {}) => {
+    return GET('/project/myCategory/queryTreeList', params)
+};
 
-/**左下--设备提醒 */
-export const leftBottom=(param:any={})=>{
-    return GET(indexUrl.leftBottom,param)
-}
 
-/**中上--地图 */
-export const centerMap=(param:any={})=>{
-    return GET(indexUrl.centerMap,param)
-}
 
-/**中下--安装计划 */
-export const installationPlan=(param:any={})=>{
-    return GET(indexUrl.centerBottom,param)
+/**系统项目信息 */
+export const projectInfoList = () => {
+    return GET('/project/projectInfo/list', {})
 }
-
-/**右上--报警次数 */
-export const alarmNum=(param:any={})=>{
-    return GET(indexUrl.rightTop,param)
-}
-
-/**右中--报警排名 */
-export const ranking=(param:any={})=>{
-    return GET(indexUrl.rightCenter,param)
-}
-
-/**右下--设备状态 */
-export const rightBottom=(param:any={})=>{
-    return GET(indexUrl.rightBottom,param)
+/**获取数据(风机 海缆 升压站) */
+export const getBaseMapData = () => {
+    return GET('/project/projectPbs/getBaseMapData', {})
 }
