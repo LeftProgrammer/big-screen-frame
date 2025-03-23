@@ -1,6 +1,9 @@
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import type { RetryOptions } from './retry-strategy';
 
+// 重新导出RetryOptions
+export type { RetryOptions };
+
 // HTTP 方法枚举
 export enum HttpMethod {
   GET = 'GET',

@@ -9,8 +9,8 @@ import * as coreUtils from './core/utils'
 import * as coreEvents from './core/events'
 import * as coreTransition from './core/transition'
 
-// 应用层模块
-import * as appAuth from './application/auth'
+// 应用层模块 - 延迟导入auth，避免在Pinia初始化前访问store
+// import * as appAuth from './application/auth'
 import * as appRouter from './application/router'
 import * as appSse from './application/sse'
 import * as appWebsocket from './application/websocket'
@@ -27,8 +27,23 @@ import BasicDashboard from './components/default-pages/BasicDashboard.vue'
 import BasicLogin from './components/default-pages/BasicLogin.vue' 
 import BasicNotFound from './components/default-pages/BasicNotFound.vue'
 
+// 明确导出类型，确保使用者可以通过TypeScript导入
+export type {
+  HttpClientConfig,
+  RequestConfig,
+  ResponseData,
+  HttpMethod,
+  UploadConfig,
+  DownloadConfig,
+  PollingConfig,
+  ProgressEvent,
+  HttpInterceptor,
+  RetryOptions
+} from './core/http/types';
+export type { RetryOptions as RetryStrategyOptions } from './core/http/retry-strategy';
+
 // 命名空间导出
-export const $http = coreHttp
+export const $http = coreHttp.http
 export const $layout = coreLayout
 export const $store = coreStore
 export const $theme = coreTheme
@@ -36,7 +51,50 @@ export const $utils = coreUtils
 export const $events = coreEvents
 export const $transition = coreTransition
 
-export const $auth = appAuth
+// 对于auth模块，使用一个懒加载函数，避免过早访问Pinia
+import type { LoginPageConfig, LoginFormConfig } from './application/auth/types/component-types';
+
+export const $auth = {
+  // 异步加载模块，避免在导入时就初始化
+  async useAuth(...args: any[]) {
+    const authModule = await import('./application/auth');
+    return authModule.useAuth(...args);
+  },
+  async login(username: string, password: string) {
+    const authModule = await import('./application/auth');
+    return authModule.login(username, password);
+  },
+  async logout() {
+    const authModule = await import('./application/auth');
+    return authModule.logout();
+  },
+  async getUser() {
+    const authModule = await import('./application/auth');
+    return authModule.getUser();
+  },
+  async getToken() {
+    const authModule = await import('./application/auth');
+    return authModule.getToken();
+  },
+  async setToken(token: string) {
+    const authModule = await import('./application/auth');
+    return authModule.setToken(token);
+  },
+  async setUser(user: any) {
+    const authModule = await import('./application/auth');
+    return authModule.setUser(user);
+  },
+  // 获取组件，这些可以安全导出，因为它们不依赖Pinia
+  LoginPage: async () => {
+    const authModule = await import('./application/auth');
+    return authModule.LoginPage;
+  },
+  LoginForm: async () => {
+    const authModule = await import('./application/auth');
+    return authModule.LoginForm;
+  }
+}
+
 export const $router = appRouter
 export const $sse = appSse
 export const $websocket = appWebsocket

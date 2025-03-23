@@ -41,3 +41,5 @@ export function createHttp(config: HttpClientConfig) {
     }
   });
 }
+
+export type { HttpClientConfig } from './types';

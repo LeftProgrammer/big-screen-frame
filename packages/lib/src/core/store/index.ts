@@ -10,21 +10,26 @@ import type { App } from 'vue';
 import { useThemeStore } from './modules/theme';
 import { useLayoutStore } from './modules/layout';
 import { useAuthStore } from './modules/auth';
-import { useAuthStore } from './modules/auth';
 
-// 创建 pinia 实例
-const pinia = createPinia();
+// 创建 pinia 实例，但不要立即使用它
+let pinia: ReturnType<typeof createPinia> | null = null;
+
+// 获取pinia实例的函数，确保只在需要时创建
+export function getPinia() {
+  if (!pinia) {
+    pinia = createPinia();
+  }
+  return pinia;
+}
 
 // 注册 store
 export function setupStore(app: App) {
-  app.use(pinia);
+  const piniaInstance = getPinia();
+  app.use(piniaInstance);
 }
 
 // 导出 store 模块
 export { useThemeStore, useLayoutStore, useAuthStore };
-
-// 导出 store 实例
-export default pinia;
 
 // 导出组合式函数
 export function useStore() {

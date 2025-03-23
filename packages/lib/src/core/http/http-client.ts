@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { CancelManager } from './cancel-manager';
 import { PollingManager } from './polling-manager';
 import { RetryStrategy } from './retry-strategy';
@@ -20,7 +20,7 @@ import type {
  */
 export class HttpClient {
   private static instance: HttpClient;
-  private axios: AxiosInstance;
+  public axios: AxiosInstance;
   private cancelManager: CancelManager;
   private pollingManager: PollingManager;
   private headerManager: HeaderManager;
@@ -66,13 +66,17 @@ export class HttpClient {
   private setupInterceptors(interceptors: HttpInterceptor[]): void {
     // 请求拦截器
     this.axios.interceptors.request.use(
-      async (config: RequestConfig) => {
+      async (config) => {
         // 合并动态请求头
         const dynamicHeaders = await this.headerManager.getHeaders();
-        config.headers = {
-          ...config.headers,
-          ...dynamicHeaders
-        };
+        if (config.headers) {
+          // 使用Axios的headers对象的set方法添加头部
+          Object.entries(dynamicHeaders).forEach(([key, value]) => {
+            if (config.headers && value !== undefined) {
+              config.headers.set(key, value);
+            }
+          });
+        }
 
         // 自动取消重复请求
         if (this.config.autoCancel) {
@@ -83,7 +87,11 @@ export class HttpClient {
         // 应用自定义拦截器
         for (const interceptor of interceptors) {
           if (interceptor.request) {
-            config = await interceptor.request(config);
+            // 使用类型断言解决类型兼容性问题
+            const result = await interceptor.request(config as any);
+            if (result) {
+              Object.assign(config, result);
+            }
           }
         }
 
@@ -139,6 +147,47 @@ export class HttpClient {
   }
 
   /**
+   * 设置基础URL
+   */
+  public setBaseURL(url: string): void {
+    this.axios.defaults.baseURL = url;
+  }
+
+  /**
+   * 设置超时时间
+   */
+  public setTimeout(timeout: number): void {
+    this.axios.defaults.timeout = timeout;
+  }
+
+  /**
+   * 设置是否携带凭证
+   */
+  public setWithCredentials(withCredentials: boolean): void {
+    this.axios.defaults.withCredentials = withCredentials;
+  }
+
+  /**
+   * 添加请求拦截器
+   */
+  public addRequestInterceptor(
+    onFulfilled?: (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig>,
+    onRejected?: (error: any) => any
+  ): void {
+    this.axios.interceptors.request.use(onFulfilled, onRejected);
+  }
+
+  /**
+   * 添加响应拦截器
+   */
+  public addResponseInterceptor(
+    onFulfilled?: (response: AxiosResponse) => AxiosResponse | Promise<AxiosResponse>,
+    onRejected?: (error: any) => any
+  ): void {
+    this.axios.interceptors.response.use(onFulfilled, onRejected);
+  }
+
+  /**
    * 发送请求
    */
   public async request<T>(config: RequestConfig): Promise<ResponseData<T>> {
@@ -158,20 +207,21 @@ export class HttpClient {
 
       // 如果配置了重试选项且请求失败，进行重试
       if (config.retry && response.status >= 400) {
-        const retryStrategy = new RetryStrategy();
-        return await retryStrategy.execute(
+        const retriedResponse = await RetryStrategy.execute(
           () => this.axios.request<ResponseData<T>>(config),
           config.retry
         );
+        return retriedResponse.data as ResponseData<T>;
       }
 
-      return response.data;
-    } catch (error) {
+      return response.data as ResponseData<T>;
+    } catch (error: unknown) {
       // 错误处理
+      const axiosError = error as AxiosError;
       if (config.handleError) {
-        config.handleError(error);
+        config.handleError(axiosError);
       } else if (config.showError !== false) {
-        this.errorManager.handleError(error);
+        this.errorManager.handleError(axiosError);
       }
       throw error;
     }
@@ -204,7 +254,7 @@ export class HttpClient {
       ...config,
       ...uploadRequestConfig
     });
-    return response.data;
+    return response.data as ResponseData<T>;
   }
 
   /**
@@ -214,7 +264,8 @@ export class HttpClient {
     const pollingConfig = config.polling as PollingConfig;
     const pollingId = pollingConfig.pollingId || `${config.method}-${config.url}`;
 
-    const { enabled } = this.pollingManager.createPolling({
+    // 创建轮询但不需要直接使用enabled返回值
+    this.pollingManager.createPolling({
       ...config,
       pollingId,
       interval: pollingConfig.interval,
@@ -224,7 +275,7 @@ export class HttpClient {
     });
 
     // 返回第一次请求的结果
-    return this.axios.request<ResponseData<T>>(config).then(response => response.data);
+    return this.axios.request<ResponseData<T>>(config).then(response => response.data as ResponseData<T>);
   }
 
   // 基础 HTTP 方法
@@ -267,11 +318,15 @@ export class HttpClient {
     url: string,
     config?: Omit<RequestConfig, 'responseType'> & { download?: DownloadConfig }
   ): Promise<void> {
-    return this.request({
+    return this.axios.request<Blob>({
       ...config,
       method: 'GET',
       url,
       responseType: 'blob'
+    }).then(response => {
+      // 使用FileManager处理下载响应
+      const downloadConfig = config?.download || {};
+      this.fileManager.handleDownloadResponse(response, downloadConfig);
     });
   }
 

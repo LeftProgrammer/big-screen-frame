@@ -33,6 +33,14 @@ export interface AuthConfig {
     userInfo?: string;
   };
 
+  // API端点配置 - 新增，支持更详细的API端点配置
+  endpoints?: {
+    login?: string;
+    logout?: string;
+    refreshToken?: string;
+    userInfo?: string;
+  };
+
   // HTTP请求头配置
   httpHeaders?: {
     authorization?: string;
@@ -47,6 +55,14 @@ export interface AuthConfig {
     networkError?: string;
     maxLoginAttempts?: string;
     unknownError?: string;
+  };
+
+  // 响应处理配置 - 新增，支持自定义响应处理逻辑
+  response?: {
+    // 自定义成功判断函数
+    isSuccessful?: (response: any) => boolean;
+    // 自定义数据提取函数
+    extractLoginData?: (response: any) => { token: string | null; userInfo?: UserInfo | null };
   };
 
   // 自定义服务
@@ -99,12 +115,10 @@ export interface AuthConfig {
 
   // Token同步配置
   tokenSync?: {
-    // 是否启用多标签页同步
+    // 是否启用跨标签页Token同步
     enabled?: boolean;
-    // 同步方式：'localStorage' | 'broadcastChannel'
-    method?: string;
-    // 同步事件名称
-    eventName?: string;
+    // 同步间隔（毫秒）
+    interval?: number;
   };
 }
 
@@ -112,17 +126,20 @@ export interface AuthConfig {
  * 认证服务接口
  */
 export interface IAuthService {
-  login(params: LoginParams): Promise<void>;
+  config: AuthConfig;
+  login(params: LoginParams): Promise<any>;
   logout(): Promise<void>;
   refreshToken(): Promise<void>;
   getCurrentUser(): Promise<UserInfo>;
   checkAuth(): boolean;
+  setToken(token: string): void;
 }
 
 /**
  * Token服务接口
  */
 export interface ITokenService {
+  config: AuthConfig;
   setToken(tokenInfo: TokenInfo): void;
   getToken(): string | null;
   getRefreshToken(): string | null;
@@ -170,6 +187,7 @@ export enum AuthErrorType {
   TOKEN_EXPIRED = 'TOKEN_EXPIRED',
   UNAUTHORIZED = 'UNAUTHORIZED',
   NETWORK_ERROR = 'NETWORK_ERROR',
+  INVALID_RESPONSE = 'INVALID_RESPONSE',
   UNKNOWN = 'UNKNOWN'
 }
 
@@ -192,4 +210,26 @@ export interface AuthState {
   refreshToken: string | null;
   loading: boolean;
   error: AuthError | null;
+}
+
+/**
+ * Jeecg-Boot响应格式接口
+ */
+export interface JeecgResponse<T = any> {
+  success: boolean;
+  message: string;
+  code: number;
+  result: T;
+  timestamp: number;
+}
+
+/**
+ * 登录结果接口
+ */
+export interface LoginResult {
+  token: string;
+  userInfo: UserInfo;
+  multi_depart?: number;
+  departs?: any[];
+  sysAllDictItems?: Record<string, any>;
 }

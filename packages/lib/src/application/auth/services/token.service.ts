@@ -1,15 +1,20 @@
-import type { AuthConfig, TokenInfo } from '../types/auth.types';
-import { storage } from '@lib/core/utils';
+import type { AuthConfig, TokenInfo, ITokenService } from '../types/auth.types';
+import { storage } from '../../../core/utils';
+import { defaultAuthConfig } from '../config/auth.config';
 
 /**
  * Token管理服务
  */
-export class TokenService {
+export class TokenService implements ITokenService {
   private static instance: TokenService;
-  private config: AuthConfig;
+  public config: AuthConfig;
 
   private constructor(config: AuthConfig) {
-    this.config = config;
+    // 确保config至少包含必需的属性
+    this.config = {
+      ...defaultAuthConfig,
+      ...config
+    };
   }
 
   public static getInstance(config: AuthConfig): TokenService {
@@ -23,15 +28,26 @@ export class TokenService {
    * 保存Token信息
    */
   public setToken(tokenInfo: TokenInfo): void {
-    const { token, refreshToken, expires } = tokenInfo;
-    storage.set(this.config.tokenKey!, token);
-
-    if (refreshToken) {
-      storage.set('refresh_token', refreshToken);
+    const { token, refreshToken, expiresIn } = tokenInfo;
+    
+    // 确保token是字符串类型
+    if (token && typeof token === 'string') {
+      const tokenKey = this.config.tokenKey || defaultAuthConfig.tokenKey || 'access_token';
+      storage.set(tokenKey, token);
+    } else {
+      console.warn('Invalid token format: token must be a non-empty string');
     }
 
-    if (expires) {
-      storage.set('token_expires', expires.toString());
+    if (refreshToken && typeof refreshToken === 'string') {
+      const refreshTokenKey = this.config.storageKeys?.refreshToken || 'refresh_token';
+      storage.set(refreshTokenKey, refreshToken);
+    }
+
+    if (expiresIn !== undefined) {
+      // 计算过期的绝对时间戳（毫秒）
+      const expiresAt = Date.now() + expiresIn * 1000;
+      const tokenExpiresKey = this.config.storageKeys?.tokenExpires || 'token_expires';
+      storage.set(tokenExpiresKey, expiresAt.toString());
     }
   }
 
@@ -39,21 +55,24 @@ export class TokenService {
    * 获取Token
    */
   public getToken(): string | null {
-    return storage.get(this.config.tokenKey!);
+    const tokenKey = this.config.tokenKey || defaultAuthConfig.tokenKey || 'access_token';
+    return storage.get<string>(tokenKey);
   }
 
   /**
    * 获取刷新Token
    */
   public getRefreshToken(): string | null {
-    return storage.get('refresh_token');
+    const refreshTokenKey = this.config.storageKeys?.refreshToken || 'refresh_token';
+    return storage.get<string>(refreshTokenKey);
   }
 
   /**
    * 获取Token过期时间
    */
   public getTokenExpires(): number | null {
-    const expires = storage.get('token_expires');
+    const tokenExpiresKey = this.config.storageKeys?.tokenExpires || 'token_expires';
+    const expires = storage.get<string>(tokenExpiresKey);
     return expires ? parseInt(expires, 10) : null;
   }
 
@@ -61,32 +80,36 @@ export class TokenService {
    * 清除所有Token相关信息
    */
   public clearToken(): void {
-    storage.remove(this.config.tokenKey!);
-    storage.remove('refresh_token');
-    storage.remove('token_expires');
+    const tokenKey = this.config.tokenKey || defaultAuthConfig.tokenKey || 'access_token';
+    storage.remove(tokenKey);
+    
+    const refreshTokenKey = this.config.storageKeys?.refreshToken || 'refresh_token';
+    storage.remove(refreshTokenKey);
+    
+    const tokenExpiresKey = this.config.storageKeys?.tokenExpires || 'token_expires';
+    storage.remove(tokenExpiresKey);
   }
 
   /**
    * 检查Token是否需要刷新
    */
   public needsRefresh(): boolean {
-    if (!this.config.autoRefreshToken) {
-      return false;
-    }
-
     const expires = this.getTokenExpires();
-    if (!expires) {
-      return false;
-    }
+    if (!expires) return true;
 
-    const now = Math.floor(Date.now() / 1000);
-    return expires - now <= this.config.tokenRefreshThreshold!;
+    // 刷新阈值，默认为过期前5分钟
+    const refreshThreshold = 5 * 60 * 1000;
+    return Date.now() > expires - refreshThreshold;
   }
 
   /**
    * 格式化Token
    */
   public formatToken(token: string): string {
-    return `${this.config.tokenPrefix} ${token}`;
+    if (!token || typeof token !== 'string') {
+      return '';
+    }
+    
+    return token.startsWith('Bearer ') ? token : `Bearer ${token}`;
   }
 }

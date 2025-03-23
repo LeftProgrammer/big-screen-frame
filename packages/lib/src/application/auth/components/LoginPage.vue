@@ -22,15 +22,13 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import LoginForm from './LoginForm.vue';
+// 使用命名导入，而不是默认导入
+import * as LoginFormVue from './LoginForm.vue';
+import type { LoginPageConfig } from '../types/component-types';
+import console from 'node:console';
 
-interface LoginPageConfig {
-  logo?: string;
-  title?: string;
-  subtitle?: string;
-  footer?: string;
-  redirectUrl?: string;
-}
+// 通过设置组件，解决导入问题
+const LoginForm = LoginFormVue;
 
 const props = defineProps<{
   config?: LoginPageConfig;
@@ -45,6 +43,7 @@ const handleLoginSuccess = () => {
 };
 
 const handleLoginError = (error: any) => {
+  console.log('Login failed:1', error);
   console.error('Login failed:', error);
 };
 </script>

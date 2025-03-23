@@ -11,7 +11,17 @@ export class ServiceFactory {
    */
   static createAuthService(config: AuthConfig): IAuthService {
     const CustomAuthService = config.customServices?.authService;
-    return CustomAuthService ? new CustomAuthService(config) : AuthService.getInstance(config);
+    // 确保所有实例化的服务都有config属性
+    if (CustomAuthService) {
+      const service = new CustomAuthService(config);
+      // 确保自定义服务实现了必要的接口
+      if (!('config' in service)) {
+        console.warn('Custom AuthService should implement the IAuthService interface properly with config property');
+        return AuthService.getInstance(config);
+      }
+      return service;
+    }
+    return AuthService.getInstance(config);
   }
 
   /**
@@ -19,6 +29,16 @@ export class ServiceFactory {
    */
   static createTokenService(config: AuthConfig): ITokenService {
     const CustomTokenService = config.customServices?.tokenService;
-    return CustomTokenService ? new CustomTokenService(config) : TokenService.getInstance(config);
+    // 确保所有实例化的服务都有config属性
+    if (CustomTokenService) {
+      const service = new CustomTokenService(config);
+      // 确保自定义服务实现了必要的接口
+      if (!('config' in service)) {
+        console.warn('Custom TokenService should implement the ITokenService interface properly with config property');
+        return TokenService.getInstance(config);
+      }
+      return service;
+    }
+    return TokenService.getInstance(config);
   }
 }

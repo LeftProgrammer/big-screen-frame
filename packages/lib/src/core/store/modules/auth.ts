@@ -1,13 +1,34 @@
 import { defineStore } from 'pinia';
-import type { AuthState, UserInfo, AuthError } from '@lib/application/auth/types/auth.types';
-import { storage } from '@lib/core/utils';
+import type { AuthState, UserInfo, AuthError } from '../../../application/auth/types/auth.types';
+import { storage } from '../../utils';
+
+// 安全地获取存储数据，处理异常情况
+const safeGetStorage = <T>(key: string, defaultValue: T): T => {
+  try {
+    const value = storage.get<string>(key);
+    if (value) {
+      if (typeof defaultValue === 'object' && defaultValue !== null) {
+        try {
+          return JSON.parse(value) as T;
+        } catch (e) {
+          console.warn(`Failed to parse JSON from ${key}:`, e);
+          return defaultValue;
+        }
+      }
+      return value as unknown as T;
+    }
+  } catch (error) {
+    console.warn(`Failed to get ${key} from storage:`, error);
+  }
+  return defaultValue;
+};
 
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
-    isAuthenticated: !!storage.get('access_token'),
-    userInfo: storage.get('user_info') ? JSON.parse(storage.get('user_info')!) : null,
-    token: storage.get('access_token'),
-    refreshToken: storage.get('refresh_token'),
+    isAuthenticated: !!safeGetStorage<string | null>('access_token', null),
+    userInfo: safeGetStorage<UserInfo | null>('user_info', null),
+    token: safeGetStorage<string | null>('access_token', null),
+    refreshToken: safeGetStorage<string | null>('refresh_token', null),
     loading: false,
     error: null
   }),

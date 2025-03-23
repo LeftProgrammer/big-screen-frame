@@ -4,6 +4,8 @@ import { TokenService } from './token.service';
 export class TokenSyncService {
   private static instance: TokenSyncService;
   private channel: BroadcastChannel | null = null;
+  private intervalId: number | null = null;
+  private eventName = 'auth:token:sync';
 
   constructor(
     private config: AuthConfig,
@@ -22,22 +24,51 @@ export class TokenSyncService {
   private initSync() {
     if (!this.config.tokenSync?.enabled) return;
 
-    const method = this.config.tokenSync.method || 'localStorage';
-    const eventName = this.config.tokenSync.eventName || 'auth:token:sync';
+    // 默认使用localStorage方式
+    const useChannel = false; // 默认不使用BroadcastChannel，简化同步机制
 
-    if (method === 'broadcastChannel') {
-      this.channel = new BroadcastChannel(eventName);
+    if (useChannel) {
+      this.channel = new BroadcastChannel(this.eventName);
       this.channel.onmessage = event => {
         if (event.data.type === 'token:update') {
-          this.tokenService.setToken(event.data.token);
+          // 确保token符合TokenInfo接口要求
+          if (typeof event.data.token === 'object' && event.data.token.token) {
+            this.tokenService.setToken(event.data.token);
+          } else {
+            console.error('Invalid token format in broadcastChannel event:', event.data);
+          }
         }
       };
     } else {
       window.addEventListener('storage', event => {
-        if (event.key === eventName) {
-          const token = JSON.parse(event.newValue || '{}');
-          this.tokenService.setToken(token);
+        if (event.key === this.eventName) {
+          try {
+            const parsedValue = JSON.parse(event.newValue || '{"token":""}');
+            this.tokenService.setToken(parsedValue);
+          } catch (error) {
+            console.error('Error parsing token from storage event:', error);
+          }
         }
+      });
+    }
+
+    // 使用interval定时同步
+    if (this.config.tokenSync.interval) {
+      this.intervalId = window.setInterval(() => {
+        this.checkAndSyncToken();
+      }, this.config.tokenSync.interval);
+    }
+  }
+
+  private checkAndSyncToken() {
+    // 在多标签页环境下检查token并同步
+    const currentToken = this.tokenService.getToken();
+    const storedToken = localStorage.getItem(this.eventName);
+    
+    if (currentToken && (!storedToken || JSON.parse(storedToken).token !== currentToken)) {
+      // 当前token与存储的不同，需要同步
+      this.syncToken({
+        token: currentToken
       });
     }
   }
@@ -45,23 +76,28 @@ export class TokenSyncService {
   syncToken(token: TokenInfo) {
     if (!this.config.tokenSync?.enabled) return;
 
-    const method = this.config.tokenSync.method || 'localStorage';
-    const eventName = this.config.tokenSync.eventName || 'auth:token:sync';
+    // 默认使用localStorage方式
+    const useChannel = false; // 默认不使用BroadcastChannel，简化同步机制
 
-    if (method === 'broadcastChannel' && this.channel) {
+    if (useChannel && this.channel) {
       this.channel.postMessage({
         type: 'token:update',
         token
       });
     } else {
-      localStorage.setItem(eventName, JSON.stringify(token));
+      localStorage.setItem(this.eventName, JSON.stringify(token));
     }
   }
 
-  destroy() {
+  dispose() {
     if (this.channel) {
       this.channel.close();
       this.channel = null;
+    }
+    
+    if (this.intervalId !== null) {
+      window.clearInterval(this.intervalId);
+      this.intervalId = null;
     }
   }
 }
