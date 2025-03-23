@@ -23,6 +23,7 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
     Components({
       resolvers: [ElementPlusResolver()],
     }),
+    // @ts-ignore - ElementPlus导入类型问题，实际功能正常
     ElementPlus({
       // useSource: true
     }),
@@ -50,10 +51,13 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
         // "@": resolve(__dirname, "./src"),
         // "components": resolve(__dirname, "./src/components"),
         // "api": resolve(__dirname, "./src/api"),
-        '@jinghe/jinghe-lanhai':
-          isProduction
-            ? '@jinghe/jinghe-lanhai'               // 使用发布版本
-            : '@jinghe/jinghe-lanhai/src/index.ts', // 使用本地源码
+        '@jinghe/jinghe-lanhai': resolve(__dirname, '../lib/src/index.ts'),
+        '@lib': resolve(__dirname, '../lib/src'),
+        '@lib/core/http': resolve(__dirname, '../lib/src/core/http'),
+        '@lib/core/utils': resolve(__dirname, '../lib/src/core/utils'),
+        '@lib/core/store': resolve(__dirname, '../lib/src/core/store'),
+        '@lib/application': resolve(__dirname, '../lib/src/application'),
+        '@lib/components': resolve(__dirname, '../lib/src/components'),
       },
     },
     css: {
@@ -71,12 +75,7 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
       minify: isProduction, // 生产环境开启压缩
     },
     optimizeDeps: {
-      exclude: ['@jinghe/jinghe-lanhai'],
-    },
-    app: {
-      config: {
-        devtools: true
-      }
+      include: ['@jinghe/jinghe-lanhai'],
     }
   }
 

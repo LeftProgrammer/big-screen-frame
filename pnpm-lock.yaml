@@ -208,6 +208,9 @@ importers:
 
   packages/template:
     dependencies:
+      '@jinghe/jinghe-lanhai':
+        specifier: workspace:*
+        version: link:../lib
       axios:
         specifier: ^1.6.8
         version: 1.6.8

@@ -73,6 +73,7 @@ import { ref } from "vue";
 
 import { useUserStore } from "@/utils/userStore";
 import { useRouter } from "vue-router";
+import { ElMessage } from 'element-plus'
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -92,12 +93,28 @@ const changePasswordType = () => {
 };
 
 const handleLogin = async () => {
+  console.log("外部-handleLogin");
   isLoading.value = true;
-  const res = await userStore.login(userInfo.value);
-  console.log("登录结果", res);
-  if (res.code == 200) {
+  
+  try {
+    const res = await userStore.login(userInfo.value);
+    console.log("登录结果", res);
+    
+    // 使用更灵活的成功判断
+    if (res && (res.code == 200 || res.success === true)) {
+      ElMessage.success('登录成功');
+      router.push("/analysis");
+    } else {
+      // 处理API返回失败的情况
+      const errorMsg = res?.message || '登录失败，请检查用户名和密码';
+      ElMessage.error(errorMsg);
+    }
+  } catch (error) {
+    // 处理代码异常的情况
+    console.error('登录过程发生错误:', error);
+    ElMessage.error(error?.message || '登录失败，请稍后重试');
+  } finally {
     isLoading.value = false;
-    router.push("/analysis");
   }
 };
 </script>
